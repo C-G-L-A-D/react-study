@@ -34,3 +34,32 @@ react 学习记录
 ​	1.4	对浏览器兼容设置，分为对生产环境和开发环境两种配置
 
 ![image-20230905165614940](https://raw.githubusercontent.com/C-G-L-A-D/drawingBed/main/blogimage-20230905165614940.png)
+
+### 2 暴露 webpack 规则配置文件
+
+​	2.1	运行 `npm run eject` 命令确认暴露 webpack 配置文件进行项目自定义。暴露后项目新增以下目录结构。
+
+* config目录下主要包含脚手架默认隐藏的配置文件
+
+![image-20230905172804129](https://raw.githubusercontent.com/C-G-L-A-D/drawingBed/main/blogimage-20230905172804129.png)
+
+* scripts文件下主要包含项目后期运行命令的入口文件
+
+![image-20230905172948671](https://raw.githubusercontent.com/C-G-L-A-D/drawingBed/main/blogimage-20230905172948671.png)
+
+​	2.2	暴露后，package.json文件会被修改。主要变化包括：
+
+* 调试命令不再通过 `react-script` 封装的插件进行调用，而是直接通过 `node` 命令运行scripts目录下的 js 文件。并且删除了 `eject` 命令（不能还原暴露文件，也不能再次暴露）。
+
+* 将隐藏的依赖再次安装显示在本文件中。
+* 添加了对 jest 和 babel 进行额外的配置项
+
+> 新增的依赖中：
+>
+> babel-preset-react-app ：对 @babel/preset-env 语法包的重写 「目的：把ES6转换为ES5」，让react可以识别
+>
+> sass-loader ： create-react-app 脚手架默认配置sass。如需更换为 less，可以使用以下两个命令：
+>
+> 安装指定版本 less： `npm install less less-loader@8` 或 `yarn add ...`
+>
+> 卸载 sass： `npm uninstall sass-loader` 或 `yarn remove ...`
