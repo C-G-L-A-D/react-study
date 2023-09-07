@@ -63,3 +63,9 @@ react 学习记录
 > 安装指定版本 less： `npm install less less-loader@8` 或 `yarn add ...`
 >
 > 卸载 sass： `npm uninstall sass-loader` 或 `yarn remove ...`
+>
+> 然后在 webpack.config.js 文件中将 loader中匹配 sass 的 loader 配置更改为 less 
+>
+> ![image-20230907172626887](https://raw.githubusercontent.com/C-G-L-A-D/drawingBed/main/blogimage-20230907172626887.png)
+>
+> ![image-20230907173315005](https://raw.githubusercontent.com/C-G-L-A-D/drawingBed/main/blogimage-20230907173315005.png)
