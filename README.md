@@ -56,16 +56,29 @@ react 学习记录
 
 > 新增的依赖中：
 >
-> babel-preset-react-app ：对 @babel/preset-env 语法包的重写 「目的：把ES6转换为ES5」，让react可以识别
+> 1）babel-preset-react-app ：对 @babel/preset-env 语法包的重写 「目的：把ES6转换为ES5」，让react可以识别
 >
-> sass-loader ： create-react-app 脚手架默认配置sass。如需更换为 less，可以使用以下两个命令：
+> 2）更换项目预编译语言（可选）： 
 >
-> 安装指定版本 less： `npm install less less-loader@8` 或 `yarn add ...`
+> ​	create-react-app 脚手架默认配置sass。如需更换为 less，可以使用以下两个命令：
 >
-> 卸载 sass： `npm uninstall sass-loader` 或 `yarn remove ...`
+> ​	安装指定版本 less： `npm install less less-loader@8` 或 `yarn add ...`
 >
-> 然后在 webpack.config.js 文件中将 loader中匹配 sass 的 loader 配置更改为 less 
+> ​	卸载 sass： `npm uninstall sass-loader` 或 `yarn remove ...`
+>
+> ​	然后在 webpack.config.js 文件中将 loader中匹配 sass 的 loader 配置更改为 less 
 >
 > ![image-20230907172626887](https://raw.githubusercontent.com/C-G-L-A-D/drawingBed/main/blogimage-20230907172626887.png)
 >
 > ![image-20230907173315005](https://raw.githubusercontent.com/C-G-L-A-D/drawingBed/main/blogimage-20230907173315005.png)
+>
+> 3） 配置 src 目录别名（可选）：
+>
+> ​	在 webpack.config.js 文件解析器 resovle 的 alias 属性中添加别名配置
+>
+> ![image-20230908095956312](https://gitee.com/roada/drawingBed/raw/main/blog/image-20230908095956312.png)
+>
+> 4）修改环境变量（可选）：
+>
+> ​	需要安装 `cross-env` ： `yarn add cross-env`
+
