@@ -4,7 +4,11 @@ export default class Tearcher extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      stus: ['xxx', 'yyy', 'zzz']
+      stus: ['xxx', 'yyy', 'zzz'],
+      info: {
+        tchName: 'hhh',
+        age: 30
+      }
     }
   }
 
@@ -20,6 +24,7 @@ export default class Tearcher extends Component {
         {this.state.stus.map((item, index) => {
           return (
             <Student
+              {...this.state.info}
               name={item}
               key={index}
               onCall={(stuName, count) => this.onCall(stuName, count)}
@@ -37,6 +42,8 @@ export class Student extends Component {
     this.state = {
       count: 0
     }
+    // 获取解构赋值的传递参数
+    console.log(props.tchName, props.age)
   }
 
   callTearcher() {
