@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ThemeContext from './context/theme-context'
 
 export default class Tearcher extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ export default class Tearcher extends Component {
     return (
       <>
         <div>Tearcher</div>
+        <Subject />
         {this.state.stus.map((item, index) => {
           return (
             <Student
@@ -54,9 +56,10 @@ export class Student extends Component {
   }
 
   render() {
+    console.log(this.context)
     return (
       <>
-        <div>
+        <div style={this.context}>
           Student - <button onClick={() => this.callTearcher()}>呼叫老师</button>
         </div>
         <div>
@@ -65,4 +68,20 @@ export class Student extends Component {
       </>
     )
   }
+}
+
+// 获取指定 context 接收祖父组件传递的参数
+Student.contextType = ThemeContext
+
+// 函数式组件通过 ThemeContext.Consumer 组件中的回调函数获取传递参数
+export function Subject() {
+  return (
+    <>
+      <ThemeContext.Consumer>
+        {value => {
+          return <div style={value}>正在上英语课</div>
+        }}
+      </ThemeContext.Consumer>
+    </>
+  )
 }
