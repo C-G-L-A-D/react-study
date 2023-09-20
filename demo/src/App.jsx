@@ -2,6 +2,7 @@ import { Component } from 'react'
 import JSX_ONE from './01_JSX/index.jsx'
 import LifeCycle from './LifeCycle/index.jsx'
 import IntercomponentCommunication from './IntercomponentCommunication'
+import Header from './Slot'
 
 class App extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class App extends Component {
         </div>
         {isShow && <LifeCycle></LifeCycle>}
         <IntercomponentCommunication />
+        <Header />
       </>
     )
   }
