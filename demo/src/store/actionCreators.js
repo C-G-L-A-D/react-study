@@ -1,11 +1,21 @@
-import { INCREASING, DECREASING } from './constants'
+import * as actionType from './constants'
 
 export const increasingAction = num => ({
-  type: INCREASING,
+  type: actionType.INCREASING,
   num
 })
 
 export const decreasingAction = num => ({
-  type: DECREASING,
+  type: actionType.DECREASING,
   num
+})
+
+export const changeBannersAction = list => ({
+  type: actionType.CHANGE_BANNERS,
+  list
+})
+
+export const changeRecommondsAction = list => ({
+  type: actionType.CHANGE_RECOMMONDS,
+  list
 })
