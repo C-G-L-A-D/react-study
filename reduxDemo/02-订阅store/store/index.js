@@ -1,4 +1,5 @@
 const { createStore } = require('redux')
+const { NAME_CHANGE } = require('./constants')
 
 const initialState = {
   name: 'luo ad',
@@ -7,7 +8,7 @@ const initialState = {
 
 function reducer(state = initialState, action) {
   switch (action.type) {
-    case 'change_name':
+    case 'NAME_CHANGE':
       return { ...state, name: action.name }
     default:
       return state // 将最新的 state 返回
