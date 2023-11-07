@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import store from '../store'
-import { increasing } from '../store/actionCreators'
+import { increasingAction } from '../store/actionCreators'
 
 export default class Home extends PureComponent {
   constructor(props) {
@@ -14,12 +14,11 @@ export default class Home extends PureComponent {
     store.subscribe(() => {
       const state = store.getState()
       this.setState({ counter: state.counter })
-      console.log(this.state, state)
     })
   }
 
   addNumber(num) {
-    store.dispatch(increasing(num))
+    store.dispatch(increasingAction(num))
   }
 
   render() {

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import store from '../store'
-import { decreasing } from '../store/actionCreators'
+import { decreasingAction } from '../store/actionCreators'
 
 export default class Profile extends PureComponent {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class Profile extends PureComponent {
   }
 
   decreaseNum(num) {
-    store.dispatch(decreasing(num))
+    store.dispatch(decreasingAction(num))
   }
 
   render() {
