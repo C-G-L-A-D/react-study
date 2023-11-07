@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import Home from './pages/Home'
 import Profile from './pages/Profile'
+import About from './pages/About'
 import store from './store/index'
 
 // PureComponent 可以帮助监听组件是否发生变化，从而决定是否更新组件
@@ -30,6 +31,7 @@ export default class App extends PureComponent {
         <div className="layout">
           <Home />
           <Profile />
+          <About />
         </div>
       </div>
     )
