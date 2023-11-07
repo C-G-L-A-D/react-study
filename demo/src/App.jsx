@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import Home from './pages/Home'
+import Category from './pages/Category'
 import store from './store/index'
 
 // PureComponent 可以帮助监听组件是否发生变化，从而决定是否更新组件
@@ -28,6 +29,7 @@ export default class App extends PureComponent {
         <h2>App Counter: {counter}</h2>
         <div>
           <Home />
+          <Category />
         </div>
       </div>
     )
