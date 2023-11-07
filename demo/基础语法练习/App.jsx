@@ -1,9 +1,9 @@
 import { Component } from 'react'
 import JSX_ONE from './01_JSX/index.jsx'
 import LifeCycle from './LifeCycle/index.jsx'
-import IntercomponentCommunication from './IntercomponentCommunication'
+import IntercomponentCommunication from './IntercomponentCommunication/index.jsx'
 import ThemeContext from './IntercomponentCommunication/context/theme-context.js'
-import Header from './Slot'
+import Header from './Slot/index.jsx'
 
 class App extends Component {
   constructor(props) {
