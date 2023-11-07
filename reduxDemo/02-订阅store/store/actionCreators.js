@@ -1,4 +1,4 @@
-const { NAME_CHANGE } = require('./store/constants')
+const { NAME_CHANGE } = require('./constants')
 
 // 创建 action 修改数据
 const nameAction = name => ({
