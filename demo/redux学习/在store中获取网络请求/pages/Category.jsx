@@ -6,6 +6,9 @@ export class Category extends PureComponent {
   constructor(props) {
     super()
   }
+  componentDidMount() {
+    this.props.fetchMultidata()
+  }
 
   render() {
     const { banners, recommonds } = this.props
@@ -42,7 +45,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchMultidata() {
-      dispatch(fetchMultidataAction)
+      dispatch(fetchMultidataAction())
     }
   }
 }
