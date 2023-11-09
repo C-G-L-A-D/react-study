@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { decreasingAction, increasingAction } from '../store/home/actionCreators'
+import { addNumber, subNumber } from '../store/featrures/home'
 import { connect } from 'react-redux'
 class Home extends PureComponent {
   constructor(props) {
@@ -39,10 +39,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     addNumber(num) {
-      dispatch(increasingAction(num))
+      dispatch(addNumber(num))
     },
     subNumber(num) {
-      dispatch(decreasingAction(num))
+      dispatch(subNumber(num))
     }
   }
 }
