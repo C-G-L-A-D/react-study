@@ -7,12 +7,12 @@ import store from './store'
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
-  <React.StrictMode>
-    <div>
-      redux学习项目
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </div>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <div>
+    redux学习项目
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </div>
+  // </React.StrictMode>
 )

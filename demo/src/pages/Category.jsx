@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-// import { fetchMultidataAction } from '../store/featrures/category'
+import { fetchMultidataAction } from '../store/featrures/category'
 
 export class Category extends PureComponent {
   constructor(props) {
@@ -46,7 +46,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchMultidata() {
-      // dispatch(fetchMultidataAction())
+      dispatch(fetchMultidataAction())
     }
   }
 }

@@ -6,8 +6,7 @@ export const fetchMultidataAction = createAsyncThunk(
   async (state, action) => {
     try {
       const res = await axios.get('http://123.207.32.32:8000/home/multidata')
-      const banners = res.data.data.banner.list || []
-      const recommend = res.data.data.recommend.list || []
+      return res.data
     } catch (error) {
       console.log(error)
     }
@@ -29,11 +28,20 @@ const categorySlice = createSlice({
       state.recommonds = payload
     }
   },
+  // 用于监听异步的action状态
   extraReducers: {
     // 监听 fetchMultidataAction 派发中状态
-    [fetchMultidataAction.pending](state, action) {},
-    [fetchMultidataAction.fulfilled](state, action) {},
-    [fetchMultidataAction.rejected](state, action) {}
+    [fetchMultidataAction.pending](state, action) {
+      console.log('pengding 状态')
+    },
+    [fetchMultidataAction.fulfilled](state, { payload }) {
+      state.banners = payload.data.banner.list || []
+      state.recommonds = payload.data.recommend.list || []
+      console.log('fulfilled 状态')
+    },
+    [fetchMultidataAction.rejected](state, action) {
+      console.log('rejected 状态')
+    }
   }
 })
 
