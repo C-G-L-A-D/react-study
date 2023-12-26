@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { fetchMultidataAction } from '../store/featrures/category'
+import { fetchMultidataAction, fetchMultidataOtherAction } from '../store/featrures/category'
 
 export class Category extends PureComponent {
   constructor(props) {
@@ -8,7 +8,8 @@ export class Category extends PureComponent {
   }
 
   componentDidMount() {
-    this.props.fetchMultidata()
+    this.props.fetchMultidata1()
+    this.props.fetchMultidata2()
   }
 
   render() {
@@ -45,8 +46,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchMultidata() {
+    fetchMultidata1() {
       dispatch(fetchMultidataAction())
+    },
+    fetchMultidata2() {
+      dispatch(fetchMultidataOtherAction({ name: '异步获取数据' }))
     }
   }
 }
