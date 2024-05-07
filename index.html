@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <video
+      src="/Users/lad/Documents/视频.mp4"
+      id="videoElement"
+      type="video/mp4"
+      controls
+      width="auto"
+      height="auto"
+      controlsList="nodownload"
+    ></video>
+    <script type="text/javascript">
+      // 调用函数，传入视频元素进行监测
+      const video = document.getElementById('videoElement') // 替换成您的视频元素的实际ID
+
+      monitorVideoCompletion(video, () => {
+        // 视频播放完毕
+        console.log('视频播放完毕')
+      })
+    </script>
+  </body>
+</html>

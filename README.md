@@ -98,3 +98,139 @@ react 学习记录
 2. 安装 `http-proxy-middleware` 依赖：`yarn add http-proxy-middleware`
 
 ![image-20230912111135911](https://gitee.com/roada/drawingBed/raw/main/blog/image-20230912111135911.png)
+
+
+
+
+
+## React-Router v6.4
+
+### 安装
+
+```bash
+# 使用 yarn 安装
+yarn install react-router-dom
+# 使用 npm 安装
+npm i react-router-dom
+```
+
+
+
+### 模式
+
+#### 使用方式
+
+​	配置路由可以选择 ` hash ` 模式和 ` history ` 模式。以下使用路由表映射配置路由进行举例。
+
+1. 因此先创建路由映射表文件:
+
+```js
+// router.js 文件
+import { createBrowserRouter, createHashRouter } from 'react-router-dom';
+import Layout from '@/components/Layout'; // 公共布局组件
+import Home from '@/views/Home'; // Home 页面文件
+const routes = [
+  {
+    path: '/',
+    element: <Layout />
+  },
+  {
+    path: '/home',
+    element: <Home />
+  }
+]
+
+// 通过 createHashRouter 函数创建 hash 路由
+const router1 = createHashRouter(routes);
+// 通过 createBrowserRouter 函数创建 history 路由
+const router2 = createBrowserRouter(routes);
+
+export default router1; // 使用 hash 模式
+```
+
+2. 在 index.jsx 文件入口位置选择路由模式并注入 router ，使其生效。（）
+
+```jsx
+// index.js 文件
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import { RouterProvider } from 'react-router-dom';
+import router from './router';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    {/* 使用 RouterProvider 向 App 组件下全局注入路由信息 */}
+    <RouterProvider router={router}>
+    	<App />
+    </RouterProvider>
+  </React.StrictMode>
+)
+```
+
+
+
+#### hash 和 history 模式的区别
+
+1. 路径不同：
+
+   ​	hash 模式路由访问路径会在中间多一个 ` # ` ，如访问 home 页面， hash 模式的访问路径为 ` http://hostname:port/#/home ` ；而 history 模式的访问路径则是 ` http://hostname:port/home ` 。
+
+​			2. 
+
+### 多级路由
+
+​	多个同级路由页面需要使用上级路由页面的布局作为公共布局，这时候就需要使用子组件嵌套，使用嵌套路由。
+
+1. 因此需要改造路由映射表 router.js 文件为嵌套路由;
+
+```js
+// router.js 文件
+import { createBrowserRouter, createHashRouter } from 'react-router-dom';
+import Layout from '@/components/Layout'; // 公共布局组件
+import Home from '@/views/Home'; // Home 页面文件
+const routes = [
+  {
+    path: '/',
+    element: <Layout />,
+    children: [ // 二级路由
+    	{
+    		path: '/home',
+    		element: <Home />
+  		},
+ 			{
+    		path: '/home',
+    		element: <Home />
+  		}
+    ]
+  }
+]
+
+...
+```
+
+
+
+## Redux
+
+### 一、初学
+
+#### 1. store
+
+​	用于存储数据的容器，整个应用里只能有一个 Store。
+
+​	Redux 提供 ` legacy_createStore ` 函数来生成 Store
+
+```js
+import { legacy_createStore } from 'redux'
+
+// createStore 已被弃用，使用 legacy_createStore 进行替代
+const store = legacy_createStore({});
+```
+
+
+
+#### 2. state
+
+### 异步操作
