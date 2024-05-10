@@ -60,11 +60,11 @@ react 学习记录
 
 #### 1）babel-preset-react-app ：
 
- 对 @babel/preset-env 语法包的重写 「目的：把 ES6 转换为 ES5」，让 react 可以识别
+对 @babel/preset-env 语法包的重写 「目的：把 ES6 转换为 ES5」，让 react 可以识别
 
 #### 2）更换项目预编译语言（可选）：
 
- create-react-app 脚手架默认配置 sass。如需更换为 less，可以参考以下步骤：
+create-react-app 脚手架默认配置 sass。如需更换为 less，可以参考以下步骤：
 
     1. 安装指定版本 less： `npm install less less-loader@8` 或 `yarn add ...`
     1. 卸载 sass： `npm uninstall sass-loader` 或 `yarn remove ...`
@@ -81,13 +81,13 @@ react 学习记录
 #### 4）修改环境变量（可选）：
 
 1. 需要安装 `cross-env` ： `yarn add cross-env` 。
-2. 在 package.j son 文件的调试命令中，需要修改的命令前加入 `cross-env <配置>` : 
+2. 在 package.j son 文件的调试命令中，需要修改的命令前加入 `cross-env <配置>` :
 
 ![image-20230915144316930](https://gitee.com/roada/drawingBed/raw/main/blog/image-20230915144316930.png)
 
 #### 5）修改浏览器兼容
 
- 通过修改兼容列表 `browserlist` 和 `development` 实现浏览器兼容，但是无法处理 ES6 内置 API 的兼容「需要 @babel/polyfill 对常见内置的 API 进行重写」。car 脚手架已经在 react-app-polufoll 中进行处理，只需要全局导入 `react-app-polyfill/<兼容版本>` 。
+通过修改兼容列表 `browserlist` 和 `development` 实现浏览器兼容，但是无法处理 ES6 内置 API 的兼容「需要 @babel/polyfill 对常见内置的 API 进行重写」。car 脚手架已经在 react-app-polufoll 中进行处理，只需要全局导入 `react-app-polyfill/<兼容版本>` 。
 
 ![image-20230911161419064](https://gitee.com/roada/drawingBed/raw/main/blog/image-20230911161419064.png)
 
@@ -98,10 +98,6 @@ react 学习记录
 2. 安装 `http-proxy-middleware` 依赖：`yarn add http-proxy-middleware`
 
 ![image-20230912111135911](https://gitee.com/roada/drawingBed/raw/main/blog/image-20230912111135911.png)
-
-
-
-
 
 ## React-Router v6.4
 
@@ -114,21 +110,19 @@ yarn install react-router-dom
 npm i react-router-dom
 ```
 
-
-
 ### 模式
 
 #### 使用方式
 
-​	配置路由可以选择 ` hash ` 模式和 ` history ` 模式。以下使用路由表映射配置路由进行举例。
+ 配置路由可以选择 `hash` 模式和 `history` 模式。以下使用路由表映射配置路由进行举例。
 
 1. 因此先创建路由映射表文件:
 
 ```js
 // router.js 文件
-import { createBrowserRouter, createHashRouter } from 'react-router-dom';
-import Layout from '@/components/Layout'; // 公共布局组件
-import Home from '@/views/Home'; // Home 页面文件
+import { createBrowserRouter, createHashRouter } from 'react-router-dom'
+import Layout from '@/components/Layout' // 公共布局组件
+import Home from '@/views/Home' // Home 页面文件
 const routes = [
   {
     path: '/',
@@ -141,47 +135,45 @@ const routes = [
 ]
 
 // 通过 createHashRouter 函数创建 hash 路由
-const router1 = createHashRouter(routes);
+const router1 = createHashRouter(routes)
 // 通过 createBrowserRouter 函数创建 history 路由
-const router2 = createBrowserRouter(routes);
+const router2 = createBrowserRouter(routes)
 
-export default router1; // 使用 hash 模式
+export default router1 // 使用 hash 模式
 ```
 
 2. 在 index.jsx 文件入口位置选择路由模式并注入 router ，使其生效。（）
 
 ```jsx
 // index.js 文件
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import { RouterProvider } from 'react-router-dom';
-import router from './router';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import { RouterProvider } from 'react-router-dom'
+import router from './router'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     {/* 使用 RouterProvider 向 App 组件下全局注入路由信息 */}
     <RouterProvider router={router}>
-    	<App />
+      <App />
     </RouterProvider>
   </React.StrictMode>
 )
 ```
 
-
-
 #### hash 和 history 模式的区别
 
 1. 路径不同：
 
-   ​	hash 模式路由访问路径会在中间多一个 ` # ` ，如访问 home 页面， hash 模式的访问路径为 ` http://hostname:port/#/home ` ；而 history 模式的访问路径则是 ` http://hostname:port/home ` 。
+    hash 模式路由访问路径会在中间多一个 `#` ，如访问 home 页面， hash 模式的访问路径为 `http://hostname:port/#/home` ；而 history 模式的访问路径则是 `http://hostname:port/home` 。
 
-​			2. 
+ 2.
 
 ### 多级路由
 
-​	多个同级路由页面需要使用上级路由页面的布局作为公共布局，这时候就需要使用子组件嵌套，使用嵌套路由。
+ 多个同级路由页面需要使用上级路由页面的布局作为公共布局，这时候就需要使用子组件嵌套，使用嵌套路由。
 
 1. 因此需要改造路由映射表 router.js 文件为嵌套路由;
 
@@ -220,7 +212,7 @@ npm i react-router-dom
 
 2. 创建路由映射配置文件，选择路由模式。其中可以选择使用 hash 路由模式或 history 路由模式。
 
-``` js
+```js
 // router -> index.js
 // 引入创建路由模式方法
 import { createBrowserRouter, createHashRouter } from 'react-router-dom'
@@ -230,11 +222,11 @@ const routes = []
 
 // 创建路由
 // history 路由模式
-const router = createBrowserRouter(routes);
+const router = createBrowserRouter(routes)
 // hash 路由模式
-const router = createHashRouter(routes);
+const router = createHashRouter(routes)
 
-export default router;
+export default router
 ```
 
 3. 配置路由表（路由映射规则）
@@ -252,14 +244,14 @@ const routes = [
   {
     path: '/', // 路由路径
     element: <App />, // 路由对应渲染的页面内容
-    children: [ 
-    	// 通过 children 属性配置子路由，形成嵌套路由
-    	{
-    		// 子路由访问时自动添加父路由的路径，这里无需添加
-    		path: 'home', 
-    		// 访问子路由页面也会一同显示父路由的内容
-    		element: <Home />
-  		}
+    children: [
+      // 通过 children 属性配置子路由，形成嵌套路由
+      {
+        // 子路由访问时自动添加父路由的路径，这里无需添加
+        path: 'home',
+        // 访问子路由页面也会一同显示父路由的内容
+        element: <Home />
+      }
     ]
   },
   {
@@ -268,9 +260,9 @@ const routes = [
   }
 ]
 
-const router = createBrowserRouter(routes);
+const router = createBrowserRouter(routes)
 // const router = createHashRouter(routes);
-export default router;
+export default router
 ```
 
 4. 将路由注入全局，使其生效
@@ -283,7 +275,7 @@ import { RouterProvider } from 'react-router-dom'
 import App from './App'
 import router from './router/index.js'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'))
 
 /*
 	被 RouterProvider 包裹的内容都可以共享同一份 router 配置，
@@ -291,9 +283,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 	RouterProvider 外的内容不受 router 影响
 */
 root.render(
-	<React.StrictMode>
+  <React.StrictMode>
     <RouterProvider router={router}>
-    	<App />
+      <App />
     </RouterProvider>
   </React.StrictMode>
 )
@@ -301,22 +293,24 @@ root.render(
 
 5. 创建页面组件。
 
-   ​	嵌套路由访问子路由页面。需要在父路由渲染的组件页面中添加占位组件。当访问子路由时，子路由的内容会替换占位组件的位置；访问父路由时占位组件不渲染。
+    嵌套路由访问子路由页面。需要在父路由渲染的组件页面中添加占位组件。当访问子路由时，子路由的内容会替换占位组件的位置；访问父路由时占位组件不渲染。
 
 ```jsx
 // src -> App.js
 import { Outlet } from 'react-router-dom'
 const App = () => {
-  return <div>
-    <h1>Hello App</h1>
-    {/* 
+  return (
+    <div>
+      <h1>Hello App</h1>
+      {/* 
     	Outlet 是占位路由，访问 /home 页面时，Home 组件的内容渲染在这 			*/}
-    <Outlet />
-  	<p>这是父路由 / 对应的组件内容页面</p>
-  </div>
-};
+      <Outlet />
+      <p>这是父路由 / 对应的组件内容页面</p>
+    </div>
+  )
+}
 
-export default App;
+export default App
 ```
 
 ```jsx
@@ -348,12 +342,12 @@ const routes = [
   {
     path: '/',
     element: <App />,
-    children: [ 
-   		 {
-    		path: 'home', 
-    		element: <Home />
-  		},
-  		{
+    children: [
+      {
+        path: 'home',
+        element: <Home />
+      },
+      {
         path: 'detail/:id', // 动态路由
         element: <Detail />
       }
@@ -361,8 +355,8 @@ const routes = [
   }
 ]
 
-const router = createBrowserRouter(routes);
-export default router;
+const router = createBrowserRouter(routes)
+export default router
 ```
 
 2. 跳转动态路由页面
@@ -411,21 +405,21 @@ export default Detail;
 >  <NavLink to="/detail/323">跳转323页</NavLink>
 > </div>
 > };
-> 
+>
 > export default Home;
 > ```
 >
 > ```scss
 > // scr -> views -> Home -> index.scss
-> 
+>
 > // NavLink 组件默认当前激活样式的选择器为 .active
 > .active {
-> background: red;
-> color: white; 
+>   background: red;
+>   color: white;
 > }
 > ```
 >
-> 如果需要使用自定义选择器样式可以解构 className获取 isActive 变量
+> 如果需要使用自定义选择器样式可以解构 className 获取 isActive 变量
 >
 > ```jsx
 > // scr -> views -> Home -> index.jsx
@@ -440,25 +434,23 @@ export default Detail;
 >  <NavLink to="/detail/323">跳转323页</NavLink>
 > </div>
 > };
-> 
+>
 > export default Home;
 > ```
 >
 > ```scss
 > // scr -> views -> Home -> index.scss
-> 
+>
 > .active {
-> background: red;
-> color: white; 
+>   background: red;
+>   color: white;
 > }
-> 
+>
 > // NavLink 自定义激活状态类名
 > .active-2 {
-> background: blue;
+>   background: blue;
 > }
 > ```
-
-
 
 ### 编程式路由
 
@@ -473,11 +465,11 @@ const Home = () => {
   const handleClick = (id) => {
     navigate(`detail/${id}`, {state: {id}})
   }
-  
+
   const handleClick1 = () => {
     navigate(`home?name=asdfff`)
   }
-  
+
   return <div>
     <h2>Hello Home</h1>
     <button onClick={() => handleClick(123)} >
@@ -515,7 +507,7 @@ export default Home;
 
 ### 路由权限拦截
 
-1. 在路由映射文件中使用 ` loader + redirect ` 来进行路由权限拦截。
+1. 在路由映射文件中使用 `loader + redirect` 来进行路由权限拦截。
 
 ```js
 // router.js
@@ -533,7 +525,7 @@ export const routes = [
     		element: <Home />,
     		// loader 函数在路由加载前触发
     		loader: async() {
-  				// 使用异步 
+  				// 使用异步
  					let res = await new Promise(resolve => {
   					setTimeout(() => {
               resolve({
@@ -543,7 +535,7 @@ export const routes = [
   				})
   				console.log('home');
 					if(res.errorCode === 0) {
-            // 返回的结果可以在对应组件内拿到 
+            // 返回的结果可以在对应组件内拿到
 						return res;
           } else {
              // loader 函数中只能使用 redirect方法来重定向跳转页面
@@ -569,15 +561,15 @@ export default createBrowserRouter(routes);
 2. 在组件内获取 loader 返回的结果
 
 ```js
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom'
 
-const Home = (props) => {
-	const data = useLoaderData();
-  console.log(data); // 输出 loader 中返回的结果
+const Home = props => {
+  const data = useLoaderData()
+  console.log(data) // 输出 loader 中返回的结果
   return <div>Home</div>
 }
 
-export default Home;
+export default Home
 ```
 
 ### 路由守卫
@@ -588,17 +580,15 @@ export default Home;
 
 ```jsx
 // BeforeEach.jsx
-import React from 'react';
+import React from 'react'
 
 export default function BeforeEach(props) {
   // props.children 将BeforeEach组件包裹内容原封不动进行展示
-  return (
-  	<div>{ props.children }</div>
-  )
+  return <div>{props.children}</div>
 }
 ```
 
-2. 将需要使用路由守卫的映射元素包裹在  BeforeEach 组件中
+2. 将需要使用路由守卫的映射元素包裹在 BeforeEach 组件中
 
 ```js
 import {createBrowserRouter }  from 'react-router-dom';
@@ -611,7 +601,7 @@ const routes = [
   {
     path: '/',
     // 将 App 根组件包裹在 BeforeEach 组件内，此时 App 根组件下所有页面都可以享有同一个路由守卫
-    element: <BeforeEach><App/></BeforeEach>, 
+    element: <BeforeEach><App/></BeforeEach>,
      // 错误页面
     errorElement： <div>404</div>,
     children: [
@@ -630,8 +620,8 @@ export default createBrowserRouter(routes);
 
 ```js
 // BeforeEach.jsx
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React from 'react'
+import { useLocation } from 'react-router-dom'
 export default function BeforeEach(props) {
   /*
   	 useLocation() 不同路由页面不一样，
@@ -639,13 +629,11 @@ export default function BeforeEach(props) {
   	 若页面没有变化，则不会重新渲染 console.log 只会触发一次
   	 因此要使路由守卫生效，必须有一个能够跟随页面变化而变化的东西来触发器重新渲染
   */
-  const location = useLocation();
-  console.log('BeforeEach');
-  
+  const location = useLocation()
+  console.log('BeforeEach')
+
   // props.children 将BeforeEach组件包裹内容原封不动进行展示
-  return (
-  	<div>{ props.children }</div>
-  )
+  return <div>{props.children}</div>
 }
 ```
 
@@ -664,7 +652,7 @@ import BeforeEach from '../components/BeforeEach';
 export const routes = [
   {
     path: '/',
-    element: <BeforeEach><App/></BeforeEach>, 
+    element: <BeforeEach><App/></BeforeEach>,
     meta: { title: 'App' }, // 自定义路由元信息
     children: [
     	{
@@ -688,54 +676,54 @@ export default createBrowserRouter(routes);
 
 ```jsx
 // BeforeEach.jsx
-import React from 'react';
-import { useLocation, matchRoutes, Navigate } from 'react-router-dom';
+import React from 'react'
+import { useLocation, matchRoutes, Navigate } from 'react-router-dom'
 import { routes } from '../../router'
 export default function BeforeEach(props) {
-  const location = useLocation();
-  
-  const matchs = matchRoutes(routes, location);
-  console.log(matchs);
-  console.log('beforeEach');
-  
+  const location = useLocation()
+
+  const matchs = matchRoutes(routes, location)
+  console.log(matchs)
+  console.log('beforeEach')
+
   // matchs 数组最后一个路由为当前页面的路由信息
-  const currentPageRoute = matchs[matchs.length - 1].route;
-  console.log('current-meta', currentPageRoute.meta);
-  
-  if(currentPageRoute.meta.auth) {
+  const currentPageRoute = matchs[matchs.length - 1].route
+  console.log('current-meta', currentPageRoute.meta)
+
+  if (currentPageRoute.meta.auth) {
     // 需要权限才能登录，不允许进入使用 Navigate 组件进行重定向跳转
-    return <Navigate to="/login"/>;
+    return <Navigate to='/login' />
   } else {
-    return <div>{ props.children }</div>
+    return <div>{props.children}</div>
   }
 }
 ```
 
 ### 默认路由、路由重定向和错误路由
 
-​	通过 `index` 属性进行设置：
+ 通过 `index` 属性进行设置：
 
 ```js
 // router.js
-import {createBrowserRouter, Navigate }  from 'react-router-dom';
-import App from '../App';
-import Home from '../views/Home/Home';
+import { createBrowserRouter, Navigate } from 'react-router-dom'
+import App from '../App'
+import Home from '../views/Home/Home'
 
 export const routes = [
   {
     path: '/',
-    element: <App/>,
+    element: <App />,
     errorElement: <div>这是错误内容</div>, // 错误路由
     children: [
-    	{
-    		index: true, // 设置为默认内容
-    		// element: <div>这里是 / 默认内容</div>
-    		element: <Navigate to="/home"/>, // 重定向到/home页面
-  		},
-    	{
-    		path: 'home',
-    		element: <Home />
-  		}
+      {
+        index: true, // 设置为默认内容
+        // element: <div>这里是 / 默认内容</div>
+        element: <Navigate to='/home' /> // 重定向到/home页面
+      },
+      {
+        path: 'home',
+        element: <Home />
+      }
     ]
   },
   {
@@ -744,10 +732,10 @@ export const routes = [
   }
 ]
 
-export default createBrowserRouter(routes);
+export default createBrowserRouter(routes)
 ```
 
- ## 
+##
 
 ## Redux
 
@@ -768,62 +756,58 @@ import { createStore as legacy_createStore } from 'redux'
 // 1. 创建初始状态
 const initState = {
   count: 0
-};
+}
 
 // 2. 创建变更状态的方法
 function counterReducer(state = initState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case 'inc':
-      return { coun: state.count+ 1 };
+      return { coun: state.count + 1 }
     default:
-      return state;
+      return state
   }
-};
+}
 
 // 3. 创建 store
-const store = createStore(counterReducer);
+const store = createStore(counterReducer)
 
 // 4. 统一导出 store
-export default store;
+export default store
 ```
 
 3. 使用 store
 
 ```jsx
-import store from '../../ store' 
+import store from '../../ store'
 import { useState } from 'react'
 const Home = () => {
   const [count, setCount] = useState(store.getState().count)
-  
+
   // 点击事件
   const handleClick = () => {
     // 通过 dispatch 方法触发 store的reducer 方法
-    store.dispatch({type: 'inc' })
+    store.dispatch({ type: 'inc' })
   }
-  
+
   // 通过 subscribe 方法获取 store 数据更新
   store.subscribe(() => {
     console.log('subscribe')
     // 重新设置 count 变量，触发页面更新
-    setCount(store.getState().count);
+    setCount(store.getState().count)
   })
-  
+
   // 渲染 store 中的内容
-  return <div onClick={handleClick}>
-    Home: { count }
-  </div>
+  return <div onClick={handleClick}>Home: {count}</div>
 }
 
-export default Home;
+export default Home
 ```
 
+### 二、使用第三方管理库简化 Redux 的使用（无需手动更新状态）
 
+ 使用 `react-redux ` 第三方库来优化 `redux` 使用
 
-### 二、使用第三方管理库简化Redux的使用（无需手动更新状态）
-
-​	使用 ` react-redux  ` 第三方库来优化 `redux` 使用
-
-1. 安装  ` react-redux  ` 
+1. 安装 `react-redux `
 
 ```bash
 npm i react-redux
@@ -833,25 +817,25 @@ npm i react-redux
 
 ```jsx
 // index.jsx
-import React from 'react';
-import ReactDom from 'react-dom/client';
-import { Provider } from 'react-redux';
+import React from 'react'
+import ReactDom from 'react-dom/client'
+import { Provider } from 'react-redux'
 import store from './store'
 import App from './App'
 
-const root = ReactDom.createRoot(document.getElementById('root'));
+const root = ReactDom.createRoot(document.getElementById('root'))
 
 // 使用 Provider 来全局注入 store，可以在状态变化时自动进行视图更新
 root.render(
-	<React.StrictMode>
-		<Provider store={store}>
-			<App />
-		</Provider>
-	</React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>
 )
 ```
 
-3. 创建store
+3. 创建 store
 
 ```js
 import { createStore } from 'redux'
@@ -859,23 +843,23 @@ import { createStore } from 'redux'
 // 1. 创建初始状态
 const initState = {
   count: 0
-};
+}
 
 // 2. 创建变更状态的方法
 function counterReducer(state = initState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case 'inc':
-      return { coun: state.count + state.payload };
+      return { coun: state.count + state.payload }
     default:
-      return state;
+      return state
   }
-};
+}
 
 // 3. 创建 store
-const store = createStore(counterReducer);
+const store = createStore(counterReducer)
 
 // 4. 统一导出 store
-export default store;
+export default store
 ```
 
 4. 使用 store
@@ -887,14 +871,14 @@ import { useSelector, useDispatch } from 'react-redux';
 export default Home() {
   // 通过 useSelector 方法获取状态
   const count = useSelector((state) => state.count);
-  
+
   const dispatch = useDispatch();
   // 点击事件
   const handleClick = () => {
     // 通过 dispatch 方法触发 store的reducer 方法
     dispatch({type: 'inc', payload: 10 })
   }
-  
+
   // 渲染 store 中的内容
   return <div onClick={handleClick}>
     Home: { count }
@@ -903,8 +887,6 @@ export default Home() {
 ```
 
 ### 三、redux 模块化
-
-
 
 1. 创建 reducer ，并抽离到单独文件
 
@@ -915,15 +897,15 @@ const initState = {
   count: 0
 }
 function counterReducer(state = initState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case 'counter/inc':
-      return { count: state.count + action.payload };
+      return { count: state.count + action.payload }
     default:
-      return state;
+      return state
   }
 }
 
-export default counterReducer;
+export default counterReducer
 ```
 
 ```js
@@ -933,35 +915,34 @@ const initState = {
   msg: 'hello'
 }
 function messageReducer(state = initState, action) {
-  switch(action.type) {
+  switch (action.type) {
     case 'message/change': // 设置方法的命名空间
-      return { msg: action.payload};
+      return { msg: action.payload }
     default:
-      return state;
+      return state
   }
 }
 
-export default messageReducer;
+export default messageReducer
 ```
 
-2. ​	通过 ` combineReducers ` 将多个 reducer 进行结合
+2.  通过 `combineReducers` 将多个 reducer 进行结合
 
 ```js
 // store -> index.js
-import { createStore, combineReducers } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { createStore, combineReducers } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import counterReducer from './modules/counter.js'
 import messageReducer from './modules/message.js'
-
 
 const reducers = combineReducers({
   counter: counterReducer, // 通过对象形式设置命名空间
   message: messageReducer
 })
 
-const store = createStore(reducers, composeWithDevTools());
+const store = createStore(reducers, composeWithDevTools())
 
-export default store;
+export default store
 ```
 
 3. 使用不同模块的 store
@@ -973,22 +954,22 @@ import { useSelector, useDispatch } from 'react-redux';
 export default Home() {
   // 获取状态时需要加上命名空间
   const count = useSelector((state) => state.counter.count);
-  
+
   const dispatch = useDispatch();
   const handleClick = () => {
     // 通过 dispatch 方法触发 reducer 方法需要加上命名空间
     dispatch({type: 'counter/inc', payload: 10 })
   }
-  
+
   return <div onClick={handleClick}>
     Home: { count }
   </div>
 }
 ```
 
-### 四、 dispatch异步操作
+### 四、 dispatch 异步操作
 
-​	由于 dispatch 默认只支持对象字面量，如果需要进行异步操作，可以使用 redux-thunk 中间件处理。
+ 由于 dispatch 默认只支持对象字面量，如果需要进行异步操作，可以使用 redux-thunk 中间件处理。
 
 1. 安装
 
@@ -1000,12 +981,11 @@ npm i redux-thunk
 
 ```js
 // store -> index.js
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { composeWithDevTools } from 'redux-devtools-extension'
 import counterReducer from './modules/counter.js'
 import messageReducer from './modules/message.js'
-
 
 const reducers = combineReducers({
   counter: counterReducer, // 通过对象形式设置命名空间
@@ -1013,9 +993,9 @@ const reducers = combineReducers({
 })
 
 // 使用 applyMiddleware 方法让中间件生效
-const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)));
+const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)))
 
-export default store;
+export default store
 ```
 
 3. 在 dispatch 中进行异步操作
@@ -1027,17 +1007,17 @@ import { useSelector, useDispatch } from 'react-redux';
 export default Home() {
   // 获取状态时需要加上命名空间
   const count = useSelector((state) => state.counter.count);
-  
+
   const dispatch = useDispatch();
   const handleClick = () => {
     // 通过 dispatch 方法触发 reducer 方法需要加上命名空间
     dispatch((dispatch) => {
       setTimeout(() => {
         dispatch({type: 'counter/inc', payload: 10 })
-      }, 2000) 
+      }, 2000)
     })
   }
-  
+
   return <div onClick={handleClick}>
     Home: { count }
   </div>
@@ -1060,15 +1040,15 @@ export default Home() {
 npm i @reduxjs/toolkit
 ```
 
-2. 引入 RTK 
+2. 引入 RTK
 
 ```js
 // store -> index.js
 import { configureStore } from '@reduxjs/toolkit'
 
-const store = configureStore();
+const store = configureStore()
 
-export default store;
+export default store
 ```
 
 3. 创建各模块的 store
@@ -1088,10 +1068,10 @@ const counterSlice = createSlice({
     inc(state, action) {
       state.count += action.payload
     }
-  },
-});
+  }
+})
 
-export default counterSlice.reducer;
+export default counterSlice.reducer
 ```
 
 ```js
@@ -1109,10 +1089,10 @@ const messageSlice = createSlice({
     change(state, action) {
       state.msg = action.payload
     }
-  },
-});
+  }
+})
 
-export default messageSlice.reducer;
+export default messageSlice.reducer
 ```
 
 4. 合并各个模块的 reducer
@@ -1132,9 +1112,9 @@ const store = configureStore({
     counter: counterReducer, // 命名空间对应reducer
     msg: messageReducer
   }
-});
+})
 
-export default store;
+export default store
 ```
 
 5. 使用共享状态
@@ -1144,20 +1124,20 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 export default Home() {
-  
+
   const count = useSelector((state) => state.counter.count);
   const msg = useSelector((state) => state.msg.msg);
-  
+
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch((dispatch) => {
       setTimeout(() => {
         dispatch({type: 'counter/inc', payload: 10 })
         dispatch({type: 'message/change', payload: '变化' })
-      }, 2000) 
+      }, 2000)
     })
   }
-  
+
   return <div onClick={handleClick}>
     Home: {count}
     { msg }
@@ -1174,7 +1154,7 @@ export default Home() {
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // 异步 action
-export const counterAction = createAsyncThunk('counter/testAction', async() => {
+export const counterAction = createAsyncThunk('counter/testAction', async () => {
   const ret = await new Promise(resolve => {
     setTimeout(() => {
       resolve(20)
@@ -1194,10 +1174,10 @@ const counterSlice = createSlice({
     inc(state, action) {
       state.count += action.payload
     }
-  },
-});
+  }
+})
 
-export default counterSlice.reducer;
+export default counterSlice.reducer
 ```
 
 2. 调用异步的 action
@@ -1207,22 +1187,22 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { counterAction } from '@/views/store/modules/counter'
 export default Home() {
-  
+
   const count = useSelector((state) => state.counter.count);
   const msg = useSelector((state) => state.msg.msg);
-  
+
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch(counterAction()).then(res => {
       console.log(res, res.payload)
-      // 获取异步 action 结果后再同步更改状态 
+      // 获取异步 action 结果后再同步更改状态
       dispatch({
         type: 'counter/inc',
         payload: res.payload
       })
     })
   }
-  
+
   return <div onClick={handleClick}>
     Home: {count}
     { msg }
@@ -1230,14 +1210,17 @@ export default Home() {
 }
 ```
 
-以上方法再使用异步 action 之后，无法在 action 中获取共享状态来同步改变，因此需要在 dispatch 异步操作后再进行同步操作。除此之外还可以使用 extraReducers 来添加同步操作
+​	如果需要在获取异步结果之后同步更新共享数据状态有两种办法：
+
+* 在异步 action 获取结果后，再派发一个 action 来同步更新数据，例如上述的代码；
+* 在 Slice 模块总，可以通过 extraReducers 属性来监听异步 action 状态。监听异步 action 的 fulfilled 状态，可以获取异步完成的结果，此时通过回调函数中的参数 state 和 action ，可以改变数据。具体如以下代码：
 
 ```js
 // store -> modules -> counter.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // 异步 action
-export const counterAction = createAsyncThunk('counter/testAction', async() => {
+export const counterAction = createAsyncThunk('counter/testAction', async () => {
   const ret = await new Promise(resolve => {
     setTimeout(() => {
       resolve(20)
@@ -1261,17 +1244,43 @@ const counterSlice = createSlice({
   extraReducers: {
     // 可在这监听异步 action 完成后的状态，进行后续同步操作
     [counterAction.fulfilled](state, action) {
-      state.count += action.payload; 
+      state.count += action.payload
+    },
+    // 同时还可以监听异步 action 派发的 pending、rejected 状态
+    [counterAction.pending](state, action) {
+       console.log('pengding 状态')
+    },
+    [counterAction.rejected](state, action) {
+      console.log('rejected 状态')
     }
   }
-});
+})
 
-export default counterSlice.reducer;
+export default counterSlice.reducer
 ```
+
+> extraReducers 属性可以通过函数对象形式来进行配置，但是也可以使用链式调用写法。用法如下：
+>
+> ```js
+> extraReducers: builder => {
+>     builder
+>     .addCase(counterAction.fulfilled, (state, { payload }) => {
+>         // 处理 异步action 成功返回的结果，变更state
+>         state.count += action.payload
+>         console.log('fulfilled 状态')
+>       })
+>       .addCase(counterAction.pending, (state, { payload }) => {
+>         console.log('pengding 状态')
+>       })
+>       .addCase(counterAction.rejected, (state, { payload }) => {
+>         console.log('rejected 状态')
+>       })
+>   }
+> ```
 
 ## redux 数据持久化
 
-​	使用 ` redux-persist ` 进行数据持久化，将数据存储在本地 storage 中，避免刷新时数据重置。
+ 使用 `redux-persist` 进行数据持久化，将数据存储在本地 storage 中，避免刷新时数据重置。
 
 1. 安装
 
@@ -1304,7 +1313,7 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  whiteList: ['count'] // 可以指定持久化store下哪些数据可以被持久化 
+  whiteList: ['count'] // 可以指定持久化store下哪些数据可以被持久化
 }
 
 const store = configureStore({
@@ -1313,53 +1322,51 @@ const store = configureStore({
     counter: persistReducer(persistConfig, counterReducer),
     message: messageReducer
   },
-  middleware: (getDefaultMiddleware) => {
+  middleware: getDefaultMiddleware => {
     // 使用中间件
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [
-          FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, PEGISTER
-        ]
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, PEGISTER]
       }
     })
   }
-});
+})
 // store 结合持久化
-persistStore(store);
+persistStore(store)
 
-export default store;
+export default store
 ```
 
 ## hooks
 
 ### useReducer
 
-​		在 ` typescript ` 中，useReducer 的类型参数为 ` Reducer<共享数据的类型, action 的类型> ` 。
+ 在 `typescript` 中，useReducer 的类型参数为 `Reducer<共享数据的类型, action 的类型>` 。
 
-* 使用方式1：
+- 使用方式 1：
 
 ```markdown
-useReducer<Reducer<共享数据类型, action类型>>(reducer, 初始数据)
+useReducer<Reducer<共享数据类型, action 类型>>(reducer, 初始数据)
 ```
 
-​		完整举例：
+ 完整举例：
 
 ```tsx
 import { Reducer, useReducer } from 'react'
 
 // 定义 state 的数据类型
 interface Data {
-  result: number;
+  result: number
 }
 // 定义 action 的数据类型
 interface Action {
-  type: 'add' | 'minus'; // 只能有 add 和 minus 两个值
-  num: number;
+  type: 'add' | 'minus' // 只能有 add 和 minus 两个值
+  num: number
 }
 
-// 创建 reducer 
+// 创建 reducer
 const reducer = (state: Data, action: Action) => {
-  switch(action.type) {
+  switch (action.type) {
     case 'add':
       return { result: state.result + action.num }
     case 'minus':
@@ -1367,45 +1374,45 @@ const reducer = (state: Data, action: Action) => {
   }
 }
 
-
 const App = function () {
-
   const [res, dispatch] = useReducer<Reducer<Data, Action>>(reducer, { result: 0 })
 
-  return <div>
-    <button onClick={() => dispatch({type: 'add', num: 21})}>加5</button>
-    <button onClick={() => dispatch({type: 'minus', num: 16})}>减5</button>
-    <div>result: { res.result }</div>
-  </div>;
-};
+  return (
+    <div>
+      <button onClick={() => dispatch({ type: 'add', num: 21 })}>加5</button>
+      <button onClick={() => dispatch({ type: 'minus', num: 16 })}>减5</button>
+      <div>result: {res.result}</div>
+    </div>
+  )
+}
 
 export default App
 ```
 
-* 使用方法2:
+- 使用方法 2:
 
 ```markdown
-useReducer<Reducer<共享数据类型, action类型>, 函数参数数据类型>(reducer, 函数参数， 返回初始结果的函数)
+useReducer<Reducer<共享数据类型, action 类型>, 函数参数数据类型>(reducer, 函数参数， 返回初始结果的函数)
 ```
 
- 		完整举例：
+完整举例：
 
 ```tsx
 import { Reducer, useReducer } from 'react'
 
 // 定义 state 的数据类型
 interface Data {
-  result: number;
+  result: number
 }
 // 定义 action 的数据类型
 interface Action {
-  type: 'add' | 'minus'; // 只能有 add 和 minus 两个值
-  num: number;
+  type: 'add' | 'minus' // 只能有 add 和 minus 两个值
+  num: number
 }
 
-// 创建 reducer 
+// 创建 reducer
 const reducer = (state: Data, action: Action) => {
-  switch(action.type) {
+  switch (action.type) {
     case 'add':
       return { result: state.result + action.num }
     case 'minus':
@@ -1413,65 +1420,61 @@ const reducer = (state: Data, action: Action) => {
   }
 }
 
-
 const App = function () {
-
-  const [res, dispatch] = useReducer<Reducer<Data, Action>, boolean>(reducer, true, (flag) => {
+  const [res, dispatch] = useReducer<Reducer<Data, Action>, boolean>(reducer, true, flag => {
     return { result: flag ? 100 : 0 }
   })
 
-  return <div>
-    <button onClick={() => dispatch({type: 'add', num: 21})}>加5</button>
-    <button onClick={() => dispatch({type: 'minus', num: 16})}>减5</button>
-    <div>result: { res.result }</div>
-  </div>;
-};
+  return (
+    <div>
+      <button onClick={() => dispatch({ type: 'add', num: 21 })}>加5</button>
+      <button onClick={() => dispatch({ type: 'minus', num: 16 })}>减5</button>
+      <div>result: {res.result}</div>
+    </div>
+  )
+}
 
 export default App
 ```
 
 ### useReducer + immer
 
-​	在改变 state 的数据时， 每次都返回一个新的对象。如果 state 的数据结构比较复杂，则每次都创建一个新对象会比较麻烦，而且影响性能。例如
+ 在改变 state 的数据时， 每次都返回一个新的对象。如果 state 的数据结构比较复杂，则每次都创建一个新对象会比较麻烦，而且影响性能。例如
 
 ```tsx
-import React, { useState, useCallback, Reducer, useReducer  } from 'react@18';
-import { createRoot } from 'react-dom@18/client';
-
-
+import React, { useState, useCallback, Reducer, useReducer } from 'react@18'
+import { createRoot } from 'react-dom@18/client'
 
 interface Student {
-  name: string,
-  sno: string,
+  name: string
+  sno: string
   age: number
 }
 
 interface Data {
-  name: string,
-  teacherName: string,
-  teacherId: string,
+  name: string
+  teacherName: string
+  teacherId: string
   students: Array<Student>
 }
 
 interface Action {
-  type: 'add' | 'minus';
-  student?: Student;
+  type: 'add' | 'minus'
+  student?: Student
 }
 
 const reducer = (state: Data, action: Action) => {
-  switch(action.type) {
+  switch (action.type) {
     case 'add':
       return { ...state, students: [...state.students, action.student] }
     case 'minus':
-      const list = state.students.length >= 1 ?state.students.splice(0, state.students.length - 1) : []
+      const list =
+        state.students.length >= 1 ? state.students.splice(0, state.students.length - 1) : []
       return { ...state, students: list }
   }
 }
 
-
-
 const App = function () {
-
   const [res, dispatch] = useReducer<Reducer<Data>, boolean>(reducer, {
     name: '一年级二班',
     teacherId: '2145345342',
@@ -1501,7 +1504,7 @@ const App = function () {
         age: 7
       }
     })
-    setNo(no+1)
+    setNo(no + 1)
   }
 
   const minusStudent = () => {
@@ -1510,36 +1513,38 @@ const App = function () {
     })
   }
 
-  return <div>
-    <button onClick={addStudent}>加学生</button>
-    <button onClick={minusStudent}>减学生</button>
+  return (
     <div>
-      <h2>{ res.name } 班</h2>
-      <p>班主任： { res.teacherName } - { res.teacherId }</p>
-      
+      <button onClick={addStudent}>加学生</button>
+      <button onClick={minusStudent}>减学生</button>
       <div>
-        {
-          res.students.map((item: Student) => {
-            return <div>
-              <h4>学生：{item.name}</h4>
-              <p>
-                编号： {item.sno}<br/>
-                年龄： {item.age} 岁
-              </p>
-            </div>
-          })
-        }
+        <h2>{res.name} 班</h2>
+        <p>
+          班主任： {res.teacherName} - {res.teacherId}
+        </p>
+
+        <div>
+          {res.students.map((item: Student) => {
+            return (
+              <div>
+                <h4>学生：{item.name}</h4>
+                <p>
+                  编号： {item.sno}
+                  <br />
+                  年龄： {item.age} 岁
+                </p>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
-    
-  </div>;
-};
+  )
+}
 
-
-const app = document.getElementById('app');
+const app = document.getElementById('app')
 const root = createRoot(app!)
-root.render(<App />);
-      
+root.render(<App />)
 ```
 
 但是可以使用 immer 库来帮助优化数据操作。immer 会监听函数里对属性的修改，然后重新创建对象。而且 immer 是依赖 Proxy 实现的。因此可以通过 immer 库对以上代码进行修改
@@ -1659,35 +1664,29 @@ root.render(<App />);
 
 ### useRef
 
-​	获取 dom 元素时，可以使用 useRef 方法
+ 获取 dom 元素时，可以使用 useRef 方法
 
 ```tsx
 const App = () => {
-  // 创建 ref ，用来绑定需要记录的 dom 元素 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState('');
- 
+  // 创建 ref ，用来绑定需要记录的 dom 元素
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [value, setValue] = useState('')
+
   // 处理输入变化的函数
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+  const handleChange = event => {
+    setValue(event.target.value)
+  }
 
   useEffect(() => {
     // 获取焦点
     inputRef.current?.focus()
   })
- 
+
   return (
     <div>
-      <input
-      ref={inputRef}
-        type="text"
-        value={value}
-        onChange={handleChange}
-      />
+      <input ref={inputRef} type='text' value={value} onChange={handleChange} />
       <p>输入的内容是: {value}</p>
     </div>
-  );
+  )
 }
 ```
-
