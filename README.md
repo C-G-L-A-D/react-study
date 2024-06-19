@@ -233,7 +233,7 @@ export default router
 
 ```js
 // router -> index.js
-import { createBrowserRouter, createHashRouter } from 'react-router-dom'
+import { createRoutesFromElements, Route } from 'react-router-dom'
 
 import Home from '@/views/Home'
 import About from '@/views/About'
@@ -260,9 +260,17 @@ const routes = [
   }
 ]
 
-const router = createBrowserRouter(routes)
-// const router = createHashRouter(routes);
-export default router
+// 路由表配置
+const routes1 = createRoutesFromElements({
+  <>
+  	<Route path="/" element={<App/>}>
+    	<Route path="home" element={<Home/>}></Route>
+  	</Route>
+		<Route path="/about" element={<About/>}></Route>
+  </>
+})
+
+export default routes
 ```
 
 4. 将路由注入全局，使其生效
@@ -273,9 +281,13 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import App from './App'
-import router from './router/index.js'
+import routes from './router/index.js'
+import { createBrowserRouter, createHashRouter } from 'react-router-dom'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
+
+const router = createBrowserRouter(routes);
+// const router = createHashRouter(routes);
 
 /*
 	被 RouterProvider 包裹的内容都可以共享同一份 router 配置，
@@ -803,9 +815,9 @@ const Home = () => {
 export default Home
 ```
 
-### 二、使用第三方管理库简化 Redux 的使用（无需手动更新状态）
+### 二、使用 `react-redux ` 简化 Redux 的使用
 
- 使用 `react-redux ` 第三方库来优化 `redux` 使用
+ 使用 `react-redux ` 第三方库来优化 `redux` 使用（无需手动更新状态）
 
 1. 安装 `react-redux `
 
@@ -864,14 +876,17 @@ export default store
 
 4. 使用 store
 
+* 方法一：使用 ` useSelector ` 和 ` useDispatch ` 来获取 store 中的 state 和 dispatch 方法。
+
 ```jsx
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 export default Home() {
-  // 通过 useSelector 方法获取状态
+  // 通过 useSelector 方法获取 state
   const count = useSelector((state) => state.count);
 
+  // 获取 dispatch 方法来派发 action
   const dispatch = useDispatch();
   // 点击事件
   const handleClick = () => {
@@ -885,6 +900,44 @@ export default Home() {
   </div>
 }
 ```
+
+* 方法二：使用 ` connect ` 函数来将redux store 和 react 组件进行连接。通过 props 来获取 state 和派发 action 的方法。
+
+```jsx
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+export default Home(props) {
+  const { count, incDispatch } = props
+
+  const handleClick = () => {
+    // 直接调用 incDispatch 方法来派发 action 事件
+    incDispatch()
+  }
+  
+  // 渲染 store 中的内容
+  return <div onClick={handleClick}>
+    Home: { count }
+  </div>
+}
+
+// 用于获取 state 数据，并将其注入组件的props中
+const mapStateToProps = state => ({
+  count: state.count
+})
+// 用于管理 action 方法的派发，并将其注入组件的props中
+const mapDispatchToProps = dispatch => ({
+  incDispatch() {
+    // 派发 action 方法
+    dispatch({type: 'inc', payload: 10 })
+  }
+})
+
+// connect 为高阶函数，参数和返回结果都是函数
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
+```
+
+
 
 ### 三、redux 模块化
 
@@ -931,7 +984,6 @@ export default messageReducer
 ```js
 // store -> index.js
 import { createStore, combineReducers } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
 import counterReducer from './modules/counter.js'
 import messageReducer from './modules/message.js'
 
@@ -940,7 +992,7 @@ const reducers = combineReducers({
   message: messageReducer
 })
 
-const store = createStore(reducers, composeWithDevTools())
+const store = createStore(reducers)
 
 export default store
 ```
@@ -967,9 +1019,47 @@ export default Home() {
 }
 ```
 
-### 四、 dispatch 异步操作
+### 四、Redux DevTools
 
- 由于 dispatch 默认只支持对象字面量，如果需要进行异步操作，可以使用 redux-thunk 中间件处理。
+​	在浏览器安装 Redux DevTools 工具插件后，还需要在项目中配置开启才会生效。配置可以使用选择通用方法或通过安装第三方库来处理 Redux DevTools 扩展的集成。
+
+* 通用方法
+
+```js
+// store -> index.js
+import { legacy_createStore as createStore, compose  } from 'redux'
+import reducer from './reducer.js'
+
+
+// 开启 redux-devtool
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+const store = createStore(reducer, composeEnhancers());
+export default store;
+```
+
+* 使用 ` redux-devtools-extension ` 库
+
+```bash
+# 安装 redux-devtools-extension 依赖库
+npm i redux-devtools-extension
+```
+
+```js
+// store -> index.js
+import { legacy_createStore as createStore  } from 'redux'
+// 引入 composeWithDevTools 来进行集成
+import { composeWithDevTools } from 'redux-devtools-extension';
+import reducer from './reducer.js'
+
+// 注入依赖
+const store = createStore(reducer, composeWithDevTools());
+export default store;
+```
+
+### 五、 dispatch 异步操作
+
+ 由于 dispatch 默认只支持对象字面量，如果需要进行异步操作，可以使用 redux-thunk 中间件进行处理，这样 dispatch 就可以传入一个异步的回调函数。
 
 1. 安装
 
@@ -1004,18 +1094,24 @@ export default store
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+const incCountAction = () => {
+  // 返回异步函数
+  return (dispatch) => {
+      setTimeout(() => {
+        // 通过 dispatch 方法触发 reducer 方法需要加上命名空间
+        dispatch({type: 'counter/inc', payload: 10 })
+      }, 2000)
+    }
+}
+
 export default Home() {
   // 获取状态时需要加上命名空间
   const count = useSelector((state) => state.counter.count);
 
   const dispatch = useDispatch();
   const handleClick = () => {
-    // 通过 dispatch 方法触发 reducer 方法需要加上命名空间
-    dispatch((dispatch) => {
-      setTimeout(() => {
-        dispatch({type: 'counter/inc', payload: 10 })
-      }, 2000)
-    })
+  	// 派发异步 action
+    dispatch(incCountAction)
   }
 
   return <div onClick={handleClick}>
@@ -1664,6 +1760,8 @@ root.render(<App />);
 
 ### useRef
 
+​	特点： 重渲染时不会重新创建
+
  获取 dom 元素时，可以使用 useRef 方法
 
 ```tsx
@@ -1690,3 +1788,11 @@ const App = () => {
   )
 }
 ```
+
+​	但是 useRef 也可以用于存储别的数据
+
+```tsx
+const ref = useRef<String>("hello world!");
+ref.current = "你好"
+```
+
