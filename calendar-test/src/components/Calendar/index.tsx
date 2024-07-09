@@ -1,11 +1,27 @@
+import { useState } from 'react'
 import style from './index.module.css'
 
 function Calendar() {
+
+    const [date, setDate] = useState(new Date())
+
+    // 切换上一个月份的 第一天
+    const handlePrevMonth = () => {
+        setDate(new Date(date.getFullYear(), date.getMonth() - 1, 1))
+    }
+
+    // 切换下一个月份的 第一天
+    const handleNextMonth = () => {
+        setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1))
+    }
+
+    console.log(date.toLocaleDateString(), '当前日期')
+
     return <div className={style.calendar}>
         <div className={style.header}>
-            <button>&lt;</button>
+            <button onClick={handlePrevMonth}>&lt;</button>
             <div>2024 年 7 月</div>
-            <button>&gt;</button>
+            <button onClick={handleNextMonth}>&gt;</button>
         </div>
         <div className={style.days}>
             <div className={style.day}>日</div>
