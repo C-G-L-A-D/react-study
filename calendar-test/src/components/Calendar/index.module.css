@@ -17,13 +17,21 @@
     flex-wrap: wrap;
 }
 
-.calendar .empty, .day {
+.calendar .day {
     width: calc(100% / 7);
     text-align: center;
     line-height: 30px;
 }
 
 .calendar .day:hover {
-    background-color: #ccc;
+    background-color: rgba(209, 209, 209, 0.6);
     cursor: pointer;
+}
+
+.calendar .last-month, .next-month {
+    color: #d0d0d0;
+}
+
+.calendar .last-month:hover, .next-month:hover {
+    color: #7c7c7c;
 }
