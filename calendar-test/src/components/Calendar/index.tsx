@@ -15,7 +15,6 @@ function Calendar() {
             <div className={style.day}>四</div>
             <div className={style.day}>五</div>
             <div className={style.day}>六</div>
-            <div className={style.day}>七</div>
             <div className={style.empty}></div>
             <div className={style.empty}></div>
             <div className={style.day}>1</div>
