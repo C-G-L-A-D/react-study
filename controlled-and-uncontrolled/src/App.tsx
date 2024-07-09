@@ -9,7 +9,7 @@ function App() {
 
   return <div>
     {/* 非受控组件，用户不能直接修改 value，维护的 value 值在组件内部 */}
-    <Calendar defaultValue={new Date()} onChange={(date) => {
+    <Calendar defaultValue={new Date('2024-5-1')} onChange={(date) => {
       console.log(date.toLocaleDateString())
     }}/>
 
