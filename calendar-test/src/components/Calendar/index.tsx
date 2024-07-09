@@ -7,6 +7,7 @@ function Calendar() {
 
     // 切换上一个月份的 第一天
     const handlePrevMonth = () => {
+        //月份 > 12 或 月份 <= 0 时，new Date 会自动更新年份创建对应日期
         setDate(new Date(date.getFullYear(), date.getMonth() - 1, 1))
     }
 
@@ -15,12 +16,27 @@ function Calendar() {
         setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1))
     }
 
-    console.log(date.toLocaleDateString(), '当前日期')
+    // 月份名称
+    const monthName = [
+        '一',
+        '二',
+        '三',
+        '四',
+        '五',
+        '六',
+        '七',
+        '八',
+        '九',
+        '十',
+        '十一',
+        '十二'
+    ]
+
 
     return <div className={style.calendar}>
         <div className={style.header}>
             <button onClick={handlePrevMonth}>&lt;</button>
-            <div>2024 年 7 月</div>
+            <div> { date.getFullYear() } 年 { monthName[date.getMonth()] } 月</div>
             <button onClick={handleNextMonth}>&gt;</button>
         </div>
         <div className={style.days}>
