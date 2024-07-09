@@ -1796,3 +1796,443 @@ const ref = useRef<String>("hello world!");
 ref.current = "你好"
 ```
 
+## 受控组件和非受控组件
+
+可以通过在哪维护目标值来区分组件是受控或非受控。如果目标值在调用方进行维护，即调用方可以直接更改目标值，则说明是受控组件；如果目标值在组件内部进行维护，即调用方或用户不能直接更改目标值，只能通过内部方法进行更改，则说明是非受控组件。
+
+在代码中触发受控组件和非受控组件的事件时，受控组件更新状态会重新渲染当前父组件，而非受控组件不会。因此非受控组件的性能会比受控组件好一些。
+
+非受控组件：
+
+```tsx
+// 非受控
+import { useState } from "react";
+
+
+// 定义组件参数类型
+interface CalendarProps {
+    defaultValue?: Date;
+    onChange?: (date: Date) => void
+}
+
+
+function Calendar(props: CalendarProps) {
+    const { defaultValue = new Date(), onChange } = props
+
+    const [value, setValue] = useState(defaultValue)
+
+    function changeValue(date: Date) {
+        // 更新值
+        setValue(date)
+        // 触发变更事件
+        onChange && onChange(date)
+    }
+
+    
+
+    return (
+        <div>
+            {value.toLocaleDateString()}
+            <div onClick={() => {changeValue(new Date('2024-5-1'))}}>2024-5-1</div>
+            <div onClick={() => {changeValue(new Date('2024-5-2'))}}>2024-5-2</div>
+            <div onClick={() => {changeValue(new Date('2024-5-3'))}}>2024-5-3</div>
+        </div>
+    )
+}
+
+export default Calendar
+```
+
+受控组件：
+
+```tsx
+// 受控
+
+interface CalendarProps {
+    value: Date;
+    onChange: (date: Date) => void;
+}
+
+function Calendar(props: CalendarProps) {
+    const { value, onChange } = props;
+
+    function changeValue(date: Date) {
+        onChange && onChange(date)
+    }
+    
+
+    return (
+        <div>
+            { value.toLocaleDateString() }
+            <div onClick={() => changeValue(new Date('2024-5-1'))}>2024-5-1</div>
+            <div onClick={() => changeValue(new Date('2024-5-2'))}>2024-5-2</div>
+            <div onClick={() => changeValue(new Date('2024-5-3'))}>2024-5-3</div>
+        </div>
+    )
+
+}
+
+export default Calendar 
+```
+
+组件使用方式：
+
+```tsx
+import { useState } from 'react'
+import ControlledCalendar from './components/Calendar/ControlledCalendar.tsx'
+import UnControlledCalendar from './components/Calendar/UnControlledCalendar.tsx'
+
+function App() {
+
+  const [value, setValue] = useState(new Date('2024-5-1'))
+
+  console.log('是否重新渲染', '在触发受控组件时，当前组件会重新渲染；在触发非受控组件时，当前组件不会重新渲染')
+
+  return <div>
+    {/* 非受控组件，用户不能直接修改 value，维护的 value 值在组件内部 */}
+    <ControlledCalendar defaultValue={new Date('2024-5-1')} onChange={(date) => {
+      console.log(date.toLocaleDateString())
+    }}/>
+
+    {/* 受控组件，用户可以直接修改 value， 维护的 value 值在调用方 */}
+    <UnControlledCalendar value={value} onChange={(date) => {
+      setValue(date)
+      console.log(date.toLocaleDateString())
+    }} />
+  </div>
+}
+
+export default App
+```
+
+但其实在封装基础组件时，是否要设置为受控或非受控，应该交由调用者去选择。
+
+同时兼容两种模式：
+
+```tsx
+import { useEffect, useRef, useState } from "react"
+
+interface CalendarProps{
+  value?: Date;
+  defaultValue?: Date;
+  onChange?: (date: Date) => void;
+}
+
+function Calendar(props: CalendarProps) {
+  // 外部传入的受控值重命名为 propsValue。初始化默认值
+  const { value: propsValue, defaultValue = new Date(), onChange } = props;
+
+  // 通过 value 区分受控模式和非受控模式
+  const [value, setValue] = useState(() => {
+    // 获取初始值
+    if (propsValue !== undefined) {
+      // 外部传入
+      return propsValue;
+    } else {
+      // 默认值
+      return defaultValue;
+    }
+  });
+
+  
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if(propsValue === undefined && !isFirstRender.current) {
+      // 重新渲染时，将受控组件转换为非受控组件
+      setValue(propsValue);
+    }
+    isFirstRender.current = false;
+  }, [propsValue]);
+
+  // 非受控模式 使用内部状态，受控模式使用 受控值
+  const mergedValue = propsValue === undefined ? value : propsValue;
+
+  function changeValue(date: Date) {
+    if (propsValue === undefined) {
+      // 非受控模式，内部更新值
+      setValue(date);
+    }
+    // 受控模式可以直接调用 onChange 方法
+    onChange?.(date);
+  } 
+
+  return <div>
+    {mergedValue?.toLocaleDateString()}
+    <div onClick={()=> {changeValue(new Date('2024-5-1'))}}>2023-5-1</div>
+    <div onClick={()=> {changeValue(new Date('2024-5-2'))}}>2023-5-2</div>
+    <div onClick={()=> {changeValue(new Date('2024-5-3'))}}>2023-5-3</div>
+  </div>
+}
+
+function App() {
+  return <Calendar defaultValue={new Date('2024-5-1')} onChange={(date) => {
+    console.log(date.toLocaleDateString());
+  }}/>
+}
+
+export default App
+```
+
+使用方式：
+
+```tsx
+import { useState } from 'react'
+import Calendar from './components/Calendar/index'
+
+function App() {
+
+  const [value, setValue] = useState(new Date('2024-5-1'))
+
+  console.log('是否重新渲染', '在触发受控组件时，当前组件会重新渲染；在触发非受控组件时，当前组件不会重新渲染')
+
+  return <div>
+    {/* 非受控组件，用户不能直接修改 value，维护的 value 值在组件内部 */}
+    <Calendar defaultValue={new Date()} onChange={(date) => {
+      console.log(date.toLocaleDateString())
+    }}/>
+
+    {/* 受控组件，用户可以直接修改 value， 维护的 value 值在调用方 */}
+    <Calendar value={value} onChange={(date) => {
+      setValue(date)
+      console.log(date.toLocaleDateString())
+    }} />
+  </div>
+}
+
+export default App
+```
+
+同理，如果是封装其他基础组件我们也可以使用同样的方法兼容两种模式。但同样的代码如果每个基础组件都需要重新写一遍的话，又太过冗余，是否可以抽取相关代码进行复用呢？
+
+我们可以封装一个 hook ，专门用来支持组件受控和非受控。通过上述内容可知，受控和非受控的区别就在于组件的状态是在何处维护的。因此我们在封装 hook 时，首先在 hook 中维护一个最终的内部状态，并且提供修改状态的方法。
+
+```ts
+import { useRef, useState, useEffect, useCallback, SetStateAction } from 'react'
+
+/**
+ * @description 用于兼容受控和非受控模式
+ * @author luo ad
+ * @date 2024-07-09
+ */
+function useMergeState<T>(
+    defaultStateValue: T,
+    props?: {
+        defaultValue?: T,
+        value?: T
+    }
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+    const { defaultValue, value: propsValue} = props || {}
+
+    // 内部状态记录
+    const [stateValue, setStateValue] = useState<T>(() => {
+        // 获取初始值
+        if (propsValue !== undefined) {
+            // 受控模式，返回受控值
+            return propsValue!;
+          } else if(defaultValue !== undefined){
+            // 非受控模式，返回外部传入的默认值
+            return defaultValue!;
+          } else {
+            // 非受控模式，返回内部默认值
+            return defaultStateValue;
+          }
+    })
+
+    // 最终状态。非受控时使用内部维护状态，受控时使用外部维护状态
+    const mergedValue = propsValue === undefined ? stateValue : propsValue
+    return [mergedValue, setStateValue]
+}
+
+export default useMergeState
+```
+
+此时 hook 就可以通过传入的 ` props.value ` 来区分使用的是哪种模式了，从而返回创建的最终状态值和更改状态值的方法。不过此时如果需要二次修改模式，还需要在 hook 调用方中判断当前模式后使用 ` setStateValue ` 来更新状态。因此我们可以继续将这一步抽取至 hook 中进行完善。
+
+```ts
+import { useRef, useState, useEffect, useCallback, SetStateAction } from 'react'
+
+// ...hook注释
+function useMergeState<T>(
+    defaultStateValue: T,
+    props?: {
+        defaultValue?: T,
+        value?: T
+    }
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+    
+     // ...
+
+    // 用于标记是否为首次渲染（使用 ref 可以避免更改状态时触发重渲染）
+    const isFirstRender = useRef(true)
+
+    // 监听 propsValue 的变化来更新最终状态（即切换受控模式或非受控模式时，才更新内部状态）
+    useEffect(() => {
+        if(propsValue === undefined && !isFirstRender.current) {
+            // 切换非受控模式，更新状态引起重渲染
+            setStateValue(propsValue!)
+        }
+        
+        // 更新标记
+        isFirstRender.current = false
+    }, [propsValue])
+
+    return [mergedValue, setStateValue]
+}
+
+export default useMergeState
+```
+
+由于组件处于受控模式时，调用方会在 onChange 方法中手动更新受控值；而非受控模式则需要在组件中进行更新。因此在组件状态值变更时，还需要额外判断是否是受控模式。这时候可以把二次封装 setStateValue 方法，使每次使用 setStateValue 方法更新状态时，都默认触发 onChange 方法。
+
+```ts
+import { useRef, useState, useEffect, useCallback, SetStateAction } from 'react'
+import usePrevious from './usePrevious'
+/**
+ * @description 用于兼容受控和非受控模式
+ * @author luo ad
+ * @date 2024-07-09
+ */
+function useMergeState<T>(
+    defaultStateValue: T,
+    props?: {
+        defaultValue?: T,
+        value?: T,
+        onChange?: (value: T) => void
+    }
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+    // 接收 onChange 事件
+    const { defaultValue, value: propsValue, onChange} = props || {}
+
+    // ...
+
+    // 判断是否是函数
+    function isFunction(value: unknown): value is ( arg0: T) => void {
+        return typeof value === 'function';
+      }
+
+    // 封装状态的 set 方法，在修改状态时触发 onChange 事件
+    const setState = useCallback((value: SetStateAction<T>) => {
+        const res = isFunction(value) ? value(stateValue) : value
+
+        if(propsValue === undefined) {
+            // 非受控模式，非受控模式，手动更新内部状态
+            setStateValue(res)
+        }
+        onChange?.(res)
+    }, [ stateValue ])
+
+    // 将更新状态方法替换为二次封装的 setState 方法
+    return [mergedValue, setState]
+}
+
+export default useMergeState
+```
+
+最后只需要修改组件内容，通过使用 useMergeState 的 hook 方法就可以使组件兼容受控和非受控模式了。
+
+```tsx
+import useMergeState from "../../hooks/useMergeState";
+
+interface CalendarProps{
+  value?: Date; // 外部传入受控值（受控）
+  defaultValue?: Date; // 内部默认状态（非受控）
+  onChange?: (date: Date) => void;
+}
+
+function Calendar(props: CalendarProps) {
+  
+  // 当前组件状态兼容受控和非受控模式（使用封装后的hook）
+  const [mergedValue, setValue] = useMergeState(new Date(), {
+    value: props.value,
+    defaultValue: props.defaultValue,
+    onChange: props.onChange
+  })
+
+
+  return <div>
+    {mergedValue?.toLocaleDateString()}
+    <div onClick={()=> {setValue(new Date('2024-5-1'))}}>2024-5-1</div>
+    <div onClick={()=> {setValue(new Date('2024-5-2'))}}>2024-5-2</div>
+    <div onClick={()=> {setValue(new Date('2024-5-3'))}}>2024-5-3</div>
+  </div>
+}
+
+
+export default Calendar
+```
+
+这样其他内容都无需变动，只需要使用 useMergeState 就可以了。运行代码后也是可以正常使用的。
+
+> 在 React 18 版本后，如果开启了严格模式，非受控模式 的组件会丢失 defaultValue 。这是因为严格模式下代码会执行两次。此时首次执行时就已经将 isFirstRender.current 标记为 false，非受控模式的 propsValue = undefined ；然后在二次执行时，useEffect 中的 if 判断为 true，进而更新状态为 undefined。
+>
+> 因此我们可以再次优化 useMergeState。通过判断 新旧 propsValue 是否相同来避免非受控模式下更新状态。因此我们需要记录上一次的 propsValue。由于 ref 在更改状态值时不会引发重渲染，因此使用 ref 来进行记录是最合适不过的。
+>
+> ```ts
+> import { useRef, useState, useEffect, useCallback, SetStateAction } from 'react'
+> import usePrevious from './usePrevious'
+> /**
+>  * @description 用于兼容受控和非受控模式
+>  * @author luo ad
+>  * @date 2024-07-09
+>  */
+> function useMergeState<T>(
+>     defaultStateValue: T, // 内部默认值
+>     props?: {
+>         defaultValue?: T, // 外部传入的默认值
+>         value?: T, // 外部传入的受控值
+>         onChange?: (value: T) => void // 状态变化时触发
+>     }
+> ): [T, React.Dispatch<React.SetStateAction<T>>] {
+>     
+>       // ...
+> 
+>     // react18 严格模式下 useEffect 执行两次，存储旧的 propsValue 来避免更新状态导致丢失 defaultValue
+>     const prevPropsValue = usePrevious(propsValue)
+> 
+>     // 首次渲染后切换为非受控模式，需要更新内部状态值
+>     useEffect(() => {
+>         // 更新标记，且首次渲染无需重新赋值
+>         if(isFirstRender.current) {
+>             isFirstRender.current = false
+>             return
+>         }
+> 
+>         // 切换非受控模式后，更新内部状态。
+>         if(propsValue === undefined && prevPropsValue !== propsValue) {
+>             // 更新状态引起重渲染
+>             setStateValue(propsValue!)
+>         }
+>         
+>     }, [propsValue])
+>       
+>       // ...
+> 
+>     
+>     return [mergedValue, setState]
+> }
+> 
+> export default useMergeState
+> ```
+>
+> 此处封装了 usePrevious 用于记录旧的 propsValue，方便后续其他内容使用。
+>
+> ```ts
+> import { PropsWithoutRef, ComponentState, useEffect, useRef } from 'react'
+> 
+> /**
+>  * @author luo ad
+>  * @description 用于记录某个状态变量的上一次值
+>  */
+> function usePrevious<T>(value: PropsWithoutRef<T> | ComponentState) {
+>   const ref = useRef();
+> 
+>   useEffect(() => {
+>     ref.current = value;
+>   });
+>   
+>   return ref.current;
+> }
+> 
+> export default usePrevious
+> ```
+
