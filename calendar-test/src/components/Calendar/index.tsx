@@ -1,5 +1,6 @@
-import { forwardRef, useImperativeHandle, useState } from 'react'
+import { forwardRef, useImperativeHandle } from 'react'
 import style from './index.module.css'
+import { useControllableValue } from 'ahooks'
 
 interface CalendarProps {
     defaultValue?: Date,
@@ -15,7 +16,11 @@ export interface CalendarRef {
 
 const Calendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProps> =  (props, ref) => {
 
-    const { defaultValue = new Date(), onChange } = props || {}
+
+    // 记录当前日期(兼容受控和非受控模式)
+    const [date, setDate] = useControllableValue(props, {
+        defaultValue: new Date()
+    })
 
     /**
      * 通过 new Date(year, month, day) 创建 Date 对象，此时 Date 对象 的日期为 year年month-1月day日
@@ -24,9 +29,8 @@ const Calendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProps> =  (p
      * 通过 getMonth() 方法获取当前月份时，返回月份数字从 0 开始
      * 通过 getDay() 方法可以计算当前是星期几
      */
-    // 记录当前日期
-    const [date, setDate] = useState(defaultValue)
     
+
     // useImperativeHandle 用于重新自定义 ref 对象
     useImperativeHandle(ref, () => {
         return {
@@ -77,8 +81,8 @@ const Calendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProps> =  (p
     }
 
     const clickHandler = (val: Date) => {
+        // ahooks 的 useControllableValue 将 setDate 进行二次封装，自动触发 onChange 事件
         setDate(val)
-        onChange?.(val)
     }
 
     // 获取当前显示的日历信息
@@ -141,7 +145,7 @@ const Calendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProps> =  (p
         }
     }
 
-    const { days, dayElements } = renderDates()
+    const { dayElements } = renderDates()
 
     return <div className={style.calendar}>
         <div className={style.header}>
