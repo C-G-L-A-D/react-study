@@ -1,11 +1,19 @@
 import { useState } from 'react'
 import style from './index.module.css'
+import useMergedValue from '../../hooks/useMergedValue'
+
+interface CalendarProps {
+    defaultValue?: Date,
+    onChange?: (date: Date) => void
+}
 
 
+const Calendar: React.FC<CalendarProps> =  (props) => {
 
-function Calendar() {
+    const { defaultValue = new Date(), onChange } = props || {}
+
     // 记录当前日期
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState(defaultValue)
     /**
      * 通过 new Date(year, month, day) 创建 Date 对象，此时 Date 对象 的日期为 year年month-1月day日
      * 月份 > 12 或 月份 <= 0 时，new Date 会自动更新年份创建对应日期
@@ -55,6 +63,11 @@ function Calendar() {
         return new Date(year, month, 1).getDay()
     }
 
+    const clickHandler = (val: Date) => {
+        setDate(val)
+        onChange?.(val)
+    }
+
     // 获取当前显示的日历信息
     const renderDates = () => {
         const days = []
@@ -90,13 +103,20 @@ function Calendar() {
                 className.push(style['last-month'])
             } else if(item.type === 'next') {
                 className.push(style['next-month'])
+            } else {
+                if(item.date.getDate() === date.getDate()) {
+                    className.push(style['selected'])
+                }
             }
 
             return (
                 <div 
                     className={className.join(' ')}
                     key={ item.date.toLocaleDateString() }
-                    onClick={() => console.log(item.date.toLocaleDateString(), item.type)}
+                    onClick={() => {
+                        console.log(item.date.toLocaleDateString(), item.type)
+                        clickHandler(item.date)
+                    }}
                 >
                     { item.date.getDate() }
                 </div>

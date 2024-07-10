@@ -35,3 +35,8 @@
 .calendar .last-month:hover, .next-month:hover {
     color: #7c7c7c;
 }
+
+.calendar .selected {
+  background-color: #ccc;
+  cursor: pointer;
+}
