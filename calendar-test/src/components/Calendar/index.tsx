@@ -1,7 +1,5 @@
 import { forwardRef, useImperativeHandle, useState } from 'react'
 import style from './index.module.css'
-import useMergedValue from '../../hooks/useMergedValue'
-import { deflate } from 'zlib'
 
 interface CalendarProps {
     defaultValue?: Date,
