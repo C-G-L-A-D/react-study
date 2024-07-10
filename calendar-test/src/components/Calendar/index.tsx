@@ -1,19 +1,24 @@
-import { useState } from 'react'
+import { forwardRef, useImperativeHandle, useState } from 'react'
 import style from './index.module.css'
 import useMergedValue from '../../hooks/useMergedValue'
+import { deflate } from 'zlib'
 
 interface CalendarProps {
     defaultValue?: Date,
     onChange?: (date: Date) => void
 }
 
+// 通过 ref 暴露 Calendar 组件的 api
+export interface CalendarRef {
+    getDate: () => Date,
+    setDate: (date: Date) => void
+}
 
-const Calendar: React.FC<CalendarProps> =  (props) => {
+
+const Calendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProps> =  (props, ref) => {
 
     const { defaultValue = new Date(), onChange } = props || {}
 
-    // 记录当前日期
-    const [date, setDate] = useState(defaultValue)
     /**
      * 通过 new Date(year, month, day) 创建 Date 对象，此时 Date 对象 的日期为 year年month-1月day日
      * 月份 > 12 或 月份 <= 0 时，new Date 会自动更新年份创建对应日期
@@ -21,6 +26,16 @@ const Calendar: React.FC<CalendarProps> =  (props) => {
      * 通过 getMonth() 方法获取当前月份时，返回月份数字从 0 开始
      * 通过 getDay() 方法可以计算当前是星期几
      */
+    // 记录当前日期
+    const [date, setDate] = useState(defaultValue)
+    
+    // useImperativeHandle 用于重新自定义 ref 对象
+    useImperativeHandle(ref, () => {
+        return {
+            getDate: () => date,
+            setDate: (date: Date) => { setDate(date) }
+        }
+    })
 
     // 月份名称
     const monthName = [
@@ -149,4 +164,4 @@ const Calendar: React.FC<CalendarProps> =  (props) => {
     </div>
 }
 
-export default Calendar
+export default forwardRef(Calendar)
