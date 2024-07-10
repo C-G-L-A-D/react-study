@@ -55,7 +55,7 @@ function Calendar() {
         return new Date(year, month, 1).getDay()
     }
 
-    // 渲染指定年月的日期
+    // 获取当前显示的日历信息
     const renderDates = () => {
         const days = []
 
@@ -68,57 +68,47 @@ function Calendar() {
 
         // 补充上一个月的日期
         for(let i = 0; i < firstDay; i++) {
-            const curDate = new Date(date.getFullYear(), date.getMonth() - 1, daysCountOnLastMonth - firstDay + 1 + i)
-            const dayElement = (
-                <div 
-                    className={[style.day, style['last-month']].join(' ')}
-                    key={curDate.toLocaleDateString()}
-                >
-                    {daysCountOnLastMonth - firstDay + 1}
-                </div>
-            )
-            days.push(
-                {
-                    date: curDate,
-                    dayElement
-                }
-            )
+            const curDate = new Date(date.getFullYear(), date.getMonth() - 1, daysCountOnLastMonth - firstDay + i + 1)
+            days.push({ date: curDate, type: 'last' })
         }
-
         // 补充当月的日期
         for(let i = 1; i <= daysCount; i++) {
             const curDate = new Date(date.getFullYear(), date.getMonth(), i)
-            const dayElement = <div className={style.day} key={curDate.toLocaleDateString()}>{i}</div>
-            days.push(
-                {
-                    date: curDate,
-                    dayElement 
-                }
-            )
+            days.push({ date: curDate, type: 'current' })
         }
-
         // 补充下一个月的日期
         const curLen = days.length
         for(let i = 1; i <= 6 * 7 - curLen; i++) {
             const curDate = new Date(date.getFullYear(), date.getMonth() + 1, i)
-            const dayElement = (
-                <div 
-                    className={[style.day, style['next-month']].join(' ')}
-                    key={curDate.toLocaleDateString()}
-                >
-                    {i}
-                </div>
-            )
-            days.push(
-                {
-                    date: curDate,
-                    dayElement 
-                }
-            )
+            days.push({ date: curDate, type: 'next' })
         }
 
-        return days
+        // 根据日历创建元素
+        const dayElements = days.map(item => {
+            let className = [style.day]
+            if(item.type === 'last') {
+                className.push(style['last-month'])
+            } else if(item.type === 'next') {
+                className.push(style['next-month'])
+            }
+
+            return (
+                <div 
+                    className={className.join(' ')}
+                    key={ item.date.toLocaleDateString() }
+                    onClick={() => console.log(item.date.toLocaleDateString(), item.type)}
+                >
+                    { item.date.getDate() }
+                </div>
+            )
+        })
+        return {
+            days,
+            dayElements
+        }
     }
+
+    const { days, dayElements } = renderDates()
 
     return <div className={style.calendar}>
         <div className={style.header}>
@@ -134,12 +124,7 @@ function Calendar() {
             <div className={style.day}>四</div>
             <div className={style.day}>五</div>
             <div className={style.day}>六</div>
-            { 
-                
-                renderDates().map(item => {
-                    return item.dayElement
-                })
-            }
+            { dayElements }
         </div>
     </div>
 }
