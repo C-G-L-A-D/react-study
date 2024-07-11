@@ -1,46 +1,239 @@
-# Getting Started with Create React App
+# 搭建日历组件（mini版）
+这个版本的日历组件需要通过 ` JavaScript ` 内置的 ` Date ` 对象来处理一下日期相关的信息，因此需要了解相关用法，具体可见[前置操作](##前置操作)。
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 前置操作
 
-## Available Scripts
+### 初始化创建 Date 对象
 
-In the project directory, you can run:
+可以使用四种方式来==创建== ` Date ` 对象值：
 
-### `npm start`
+* 获取当前时间
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```js
+// 当参数为空时，默认以当前日期时间创建 Date 对象
+const date = new Date();
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+* 通过时间戳（整数形）创建 ` Date ` 对象
 
-### `npm test`
+```js
+// milliseconds 参数是一个 Unix 时间戳。以毫秒为单位，从 1970.01.01 开始计算
+const milliseconds = 1720599553218; // 表示时间为 2024.07.10 16:19:13.218
+const date = new Date(milliseconds);
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* 通过制定日期（字符串形式）创建 ` Date ` 对象
 
-### `npm run build`
+```js
+// 传入的 dateString 参数字符串必须符合日期格式，例如以下的格式均符合条件
+let dateString = "2024.07.10 16:22:10.245"
+dateString = "2024.07.10 16:22"
+dateString = "2024.07.10"
+dateString = "2024.07"
+dateString = "2024"
+dateString = "2024-07-10 16:22:10"
+dateString = "2024/07/10 16:22:10"
+dateString = "2024/07"
+// dateString = "2024/07/10 16" 不符合日期格式，报错
+const date = new Date(dateString);
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* 通过制定日期（多参数）创建 ` Date ` 对象
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```js
+// 初始化创建 Date 对象时，可以一次性传入 7 个参数。当然也可以按顺序传入部分类型参数即可。
+const year = 2024; // 年
+const month = 07; // 月
+const day = 10; // 日
+const hours = 16; // 时
+const minutes = 37; // 分
+const seconds = 8; // 秒
+const milliseconds = 12; // 毫秒  
+const date1 = new Date(year, month, day, hours, minutes, seconds, milliseconds);
+const date2 = new Date(year, month, day, hours, minutes, seconds);
+const date3 = new Date(year, month, day, hours, minutes);
+const date4 = new Date(year, month, day, hours);
+const date5 = new Date(year, month);
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+> 以上方法中，通过字符串日期形式和多参数形式创建的 ` Date ` 对象可以不是完整的日期时间，在这种情况下 ` Date ` 对象会自动补足默认值：
+>
+> * 月份：默认为 0，即 1 月；
+> * 日期：默认为 1，即每月第一天；
+> * 小时：默认为 0，即午夜；
+> * 分钟：默认为 0；
+> * 秒数：默认为 0；
+> * 毫秒数：默认为 0。
 
-### `npm run eject`
+### 通过 Date 对象获取基础日期时间
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+* 通过  ` Date ` 对象获取==年份==
+```js
+// 使用 getFullYear 方法
+const date = new Date();
+date.getFullYear(); // 2024
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* 通过  ` Date ` 对象获取==月份==（0 ～ 11）
+```js
+// 使用 getMonth 方法，0 表示 1月，以此类推到 11 表示 12 月
+const date = new Date();
+date.getMonth(); // 6
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+* 通过  ` Date ` 对象获取==一个月中的某一天==（1 ～ 31）
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```js
+// 使用 getDate 方法
+const date = new Date('2024.07.10');
+date.getDate(); // 31
+```
 
-## Learn More
+* 通过  ` Date ` 对象获取==小时==（0 ～ 23）
+```js
+// 使用 getHours 方法
+const date = new Date();
+date.getHours(); // 17
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+* 通过  ` Date ` 对象获取==分钟==（0 ～ 59）
+```js
+// 使用 getMinutes 方法
+const date = new Date();
+date.getMinutes(); // 3
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+* 通过  ` Date ` 对象获取==秒数==（0 ～ 59）
+```js
+// 使用 getSeconds 方法
+const date = new Date();
+date.getSeconds(); // 36
+```
+
+* 通过  ` Date ` 对象获取==毫秒数==（0 ～ 999）
+```js
+// 使用 getMilliseconds 方法
+const date = new Date();
+date.getMilliseconds(); // 427
+```
+
+* 通过  ` Date ` 对象获取==一周中的某一天==（0 ～ 6）
+```js
+// 使用 getDay 方法，从 星期天 开始 到星期六计算
+const date = new Date();
+date.getDay(); // 3
+```
+
+* 通过  ` Date ` 对象获取==时间戳==（自 1970.01.01 至今的毫秒数）
+```js
+// 使用 getTime 方法
+const date = new Date();
+date.getTime(); // 1720602216427
+```
+
+### 修改 Date 对象的日期时间
+
+* 修改==年份==
+```js
+// 使用 setFullYear 方法修改年份
+const date = new Date('2016.02.26 9:40:20.453');
+date.setFullYear(2025); // 将时间修改为 2025.02.26 9:40:20.453
+```
+
+* 修改==月份==（0 ～ 11）
+```js
+// 使用 setMonth 方法修改月份
+const date = new Date('2016.02.26 9:40:20.453');
+date.setMonth(8); // 将时间修改为 2016.09.26 9:40:20.453
+```
+
+* 修改==日期==（0 ～ 31）
+```js
+// 使用 setDate 方法修改日期
+const date = new Date('2016.02.26 9:40:20.453');
+date.setDate(8); // 将时间修改为 2016.02.8 9:40:20.453
+```
+
+* 修改==小时==（0 ～ 23）
+```js
+// 使用 setHour 方法修改小时
+const date = new Date('2016.02.26 9:40:20.453');
+date.setHour(8); // 将时间修改为 2016.02.26 8:40:20.453
+```
+
+* 修改==分钟==（0 ～ 59）
+```js
+// 使用 setMinutes 方法修改分钟
+const date = new Date('2016.02.26 9:40:20.453');
+date.setMinutes(8); // 将时间修改为 2016.02.26 9:8:20.453
+```
+
+* 修改==秒数==（0 ～ 59）
+```js
+// 使用 setSeconds 方法修改秒数
+const date = new Date('2016.02.26 9:40:20.453');
+date.setSeconds(8); // 将时间修改为 2016.02.26 9:40:8.453
+```
+
+* 修改==毫秒数==（0 ～ 59）
+```js
+// 使用 setMilliseconds 方法修改毫秒数
+const date = new Date('2016.02.26 9:40:20.453');
+date.setMilliseconds(8); // 将时间修改为 2016.02.26 9:40:20.8
+```
+
+### 通过 Date 对象处理时间
+
+时间格式有很多种，不同地区使用的时间格式不一样，例如：GMT（格林尼治标准时间）、UTC（协调世界时）、CST（中国的标准时间）等。而我们一般使用通过 ` new Date ` 创建的时间格式一般是 CST（中国的标准时间）。
+
+```js
+const date = new Date('2016.02.26 9:40:20.453');
+// Fri Feb 26 2016 09:40:20 GMT+0800 (中国标准时间)
+console.log(date);
+// 等同于 console.log(date.toString())
+
+// 输出时间部分
+// 09:40:20 GMT+0800 (中国标准时间)
+console.log(date.toTimeString())
+```
+
+而 ` Date ` 对象也提供了一些方法帮助我们根据不同时间格式进行处理。
+
+* 根据本地时间格式，获取日期
+```js
+// 使用 toLocaleDateString 方法获取日期
+const date = new Date(2017, 10, 23);
+date.toLocaleDateString(); // 2017/11/23
+```
+
+* 根据本地时间格式，获取时间
+```js
+// 使用 toLocaleTimeString 方法获取时间
+const date = new Date(2017, 10, 23);
+date.toLocaleTimeString(); // 00:00:00
+```
+
+* 根据本地时间格式，获取完整日期时间
+```js
+// 使用 toLocaleString 方法获取完整日期时间
+const date = new Date(2017, 10, 23);
+date.toLocaleString(); // 2017/11/23 00:00:00
+```
+
+* 根据 UTC（协调世界时），获取完整时间日期
+```js
+// 使用 toUTCString 方法获取 UTC（协调世界时）格式的完整日期时间
+const date = new Date(2017, 10, 23);
+date.toUTCString(); // Wed, 22 Nov 2017 16:00:00 GMT
+```
+
+* 根据 ISOS 格式的日期时间
+```js
+// 使用 toISOString 方法获取 ISOS 标准的完整日期时间
+const date = new Date(2017, 10, 23);
+date.toISOString(); // 2017-11-22T16:00:00.000Z
+```
+
+## 一、 演示（了解日历组件要求）
+
+## 二、 搭建基础界面框架
