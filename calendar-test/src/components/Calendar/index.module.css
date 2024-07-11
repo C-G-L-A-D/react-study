@@ -12,6 +12,12 @@
     height: 40px;
 }
 
+.calendar > .header .btns {
+    button {
+        margin: 0 5px;
+    }
+}
+
 .calendar > .days {
     display: flex;
     flex-wrap: wrap;

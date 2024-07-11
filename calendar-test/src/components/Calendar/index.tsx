@@ -65,6 +65,16 @@ const Calendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProps> =  (p
         setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1))
     }
 
+    // 切换上一年
+    const handlePrevYear = () => {
+        setDate(new Date(date.getFullYear() - 1, date.getMonth(), 1))
+    }
+
+    // 切换下一年
+    const handleNextYear = () => {
+        setDate(new Date(date.getFullYear() + 1, date.getMonth(), 1))
+    }
+
     // 获取指定月份的天数（ month从 0 开始 ）
     const daysOfMonth = (year: number, month: number) => {
         // new Date(year, month + 1, 1) 代表 year 年 month + 1 月 1 日
@@ -149,9 +159,15 @@ const Calendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProps> =  (p
 
     return <div className={style.calendar}>
         <div className={style.header}>
-            <button onClick={handlePrevMonth}>&lt;</button>
+            <div className={style.btns}>
+                <button onClick={handlePrevYear}>&lt;&lt;</button>
+                <button onClick={handlePrevMonth}>&lt;</button>
+            </div>
             <div> { date.getFullYear() } 年 { monthName[date.getMonth()] } 月</div>
-            <button onClick={handleNextMonth}>&gt;</button>
+            <div className={style.btns}>
+                <button onClick={handleNextMonth}>&gt;</button>
+                <button onClick={handleNextYear}>&gt;&gt;</button>
+            </div>
         </div>
         <div className={style.days}>
             <div className={style.day}>日</div>
