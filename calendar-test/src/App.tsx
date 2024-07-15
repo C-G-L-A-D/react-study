@@ -17,7 +17,6 @@ function App() {
       <button onClick={setCalendarTime}>设置时间为 2023-05-03</button>
       <button onClick={getCalendarTime}>获取当前时间</button>
       <Calendar ref={calendarRef} defaultValue={new Date('2024, 3, 5')}/>
-      <Calendar />
     </div>
   );
 }
