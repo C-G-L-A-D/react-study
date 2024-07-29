@@ -1,6 +1,7 @@
 import { Dayjs } from 'dayjs';
 import './index.scss';
 import MonthCalendar from './MonthCalendar';
+import Header from './Header';
 
 export interface CalendarProps {
     value: Dayjs
@@ -8,7 +9,7 @@ export interface CalendarProps {
 
 function Calendar(props: CalendarProps) {
     return <div className="calendar">
-        <div className="calendar-header"></div>
+        <Header />
         <MonthCalendar {...props}/>
     </div>
 }
