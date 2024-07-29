@@ -6,7 +6,9 @@ import LocaleContext from './LocaleContext';
 import allLocales from './locale';
 
 // 子组件继承父组件的传参
-interface MonthCalendarProps extends CalendarProps {}
+interface MonthCalendarProps extends CalendarProps {
+    selectHandler?: (date: Dayjs) => void
+}
 
 /**
  * 根据指定日期获取当前日历信息
@@ -46,11 +48,13 @@ function getAllDays(date: Dayjs) {
  */
 function renderDays(
     days: Array<{date: Dayjs, currentMonth: boolean}>,
-    dateRender?: (currentDate: Dayjs) => ReactNode,
-    dateInnerContent?: (currentDate: Dayjs) => ReactNode    
+    value: Dayjs,
+    dateRender?: MonthCalendarProps['dateRender'],
+    dateInnerContent?: MonthCalendarProps['dateInnerContent'],
+    selectHandler?: MonthCalendarProps['selectHandler']
 ) {
     const rows = [];
-    
+
     for(let i = 0; i < 6; i++) {
         const row = []
         for(let j = 0; j < 7; j++) {
@@ -58,6 +62,7 @@ function renderDays(
             row[j] = (
                 <div
                 key={item.date.format('YYYY-MM-DD')}
+                onClick={() => selectHandler?.(item.date)}
                 className={
                     "calendar-month-body-cell" +
                         (item.currentMonth ? 
@@ -87,7 +92,7 @@ function renderDays(
 }
 
 function MonthCalendar(props: MonthCalendarProps) {
-    const { value, dateRender, dateInnerContent } = props
+    const { value, dateRender, dateInnerContent, selectHandler } = props
 
     const weekList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
 
@@ -110,7 +115,7 @@ function MonthCalendar(props: MonthCalendarProps) {
             }
         </div>
         <div className="calendar-month-body">
-            {renderDays(allDays, dateRender, dateInnerContent)}
+            {renderDays(allDays, value, dateRender, dateInnerContent, selectHandler)}
         </div>
     </div>
 }
