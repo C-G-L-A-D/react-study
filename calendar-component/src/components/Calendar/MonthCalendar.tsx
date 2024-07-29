@@ -1,9 +1,9 @@
 import { Dayjs } from 'dayjs'
 import { CalendarProps } from './index'
+import { ReactNode } from 'react';
 
-interface MonthCalendarProps extends CalendarProps {
- 
-}
+// 子组件继承父组件的传参
+interface MonthCalendarProps extends CalendarProps {}
 
 /**
  * 根据指定日期获取当前日历信息
@@ -41,7 +41,11 @@ function getAllDays(date: Dayjs) {
  * @param days 日历信息
  * @returns 日历组件显示
  */
-function renderDays(days: Array<{date: Dayjs, currentMonth: boolean}>) {
+function renderDays(
+    days: Array<{date: Dayjs, currentMonth: boolean}>,
+    dateRender?: (currentDate: Dayjs) => ReactNode,
+    dateInnerContent?: (currentDate: Dayjs) => ReactNode    
+) {
     const rows = [];
     
     for(let i = 0; i < 6; i++) {
@@ -56,7 +60,9 @@ function renderDays(days: Array<{date: Dayjs, currentMonth: boolean}>) {
                         (item.currentMonth ? 
                             ' calendar-month-body-cell-current' : '')
                 }>
-                    {item.date.date()}
+                    {
+                        dateRender ? dateRender(item.date) : item.date.date()
+                    }
                 </div>
             )
         }
@@ -69,7 +75,7 @@ function renderDays(days: Array<{date: Dayjs, currentMonth: boolean}>) {
 }
 
 function MonthCalendar(props: MonthCalendarProps) {
-    const { value } = props
+    const { value, dateRender, dateInnerContent } = props
 
     const weekList = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 
@@ -87,7 +93,7 @@ function MonthCalendar(props: MonthCalendarProps) {
             }
         </div>
         <div className="calendar-month-body">
-            {renderDays(allDays)}
+            {renderDays(allDays, dateRender, dateInnerContent)}
         </div>
     </div>
 }

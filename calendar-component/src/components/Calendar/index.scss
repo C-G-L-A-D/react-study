@@ -77,10 +77,10 @@
 
         &-cell {
             flex: 1;
-            border: 1px solid #eee;
-            padding: 10px;
+            border: 1px solid #eee; 
             color: #ccc;
             cursor: pointer;
+            overflow: hidden;
             &-current {
                 color: #000;
             }
