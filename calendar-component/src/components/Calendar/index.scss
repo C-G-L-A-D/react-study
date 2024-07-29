@@ -29,6 +29,11 @@
             flex: 1;
             border: 1px solid #eee;
             padding: 10px;
+            color: #ccc;
+            cursor: pointer;
+            &-current {
+                color: #000;
+            }
         }
    }
 }

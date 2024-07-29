@@ -36,6 +36,11 @@ function getAllDays(date: Dayjs) {
     return daysInfo
 }
 
+/**
+ * 渲染日历表格样式（根据每行进行渲染）
+ * @param days 日历信息
+ * @returns 日历组件显示
+ */
 function renderDays(days: Array<{date: Dayjs, currentMonth: boolean}>) {
     const rows = [];
     
@@ -43,14 +48,22 @@ function renderDays(days: Array<{date: Dayjs, currentMonth: boolean}>) {
         const row = []
         for(let j = 0; j < 7; j++) {
             const item = days[i * 7 + j];
-            row[j] = <div className="calendar-month-body-cell">
-                {item.date.date()}
-            </div>
+            row[j] = (
+                <div
+                key={item.date.format('YYYY-MM-DD')}
+                className={
+                    "calendar-month-body-cell" +
+                        (item.currentMonth ? 
+                            ' calendar-month-body-cell-current' : '')
+                }>
+                    {item.date.date()}
+                </div>
+            )
         }
         rows.push(row)
     }
 
-    return rows.map(row => <div className="calendar-month-body-row">
+    return rows.map((row, index) => <div className="calendar-month-body-row" key={index}>
         {row}
     </div>)
 }
