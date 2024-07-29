@@ -2,7 +2,7 @@ import { Dayjs, locale } from 'dayjs';
 import './index.scss';
 import MonthCalendar from './MonthCalendar';
 import Header from './Header';
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode, useState } from 'react';
 import cs from 'classnames';
 import LocaleContext from './LocaleContext';
 
@@ -21,15 +21,21 @@ export interface CalendarProps {
 
 function Calendar(props: CalendarProps) {
 
-    const { value, style, className, locale } = props
+    const { value, style, className, locale, onChange } = props
 
     // 使用 classnames 依赖库来合并类名
     const classNames = cs("calendar", className)
 
+    const [curValue, setCurValue] = useState<Dayjs>(value)
+    function selectHandler(date: Dayjs) {
+        setCurValue(date)
+        onChange?.(date)
+    }
+
     return <LocaleContext.Provider value={{locale: locale || navigator.language}}>
         <div className={classNames} style={style}>
             <Header />
-            <MonthCalendar {...props}/>
+            <MonthCalendar {...props} value={curValue} selectHandler={selectHandler} />
         </div>
     </LocaleContext.Provider>
 }

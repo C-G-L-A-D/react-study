@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs'
 import { CalendarProps } from './index'
 import { ReactNode, useContext } from 'react';
-import CalendarLocale from './locale/zh-CN';
+import cs from 'classnames';
 import LocaleContext from './LocaleContext';
 import allLocales from './locale';
 
@@ -59,6 +59,7 @@ function renderDays(
         const row = []
         for(let j = 0; j < 7; j++) {
             const item = days[i * 7 + j];
+            // 设置每个日期的样式，并兼容外部配置
             row[j] = (
                 <div
                 key={item.date.format('YYYY-MM-DD')}
@@ -71,7 +72,12 @@ function renderDays(
                     {
                         dateRender ? dateRender(item.date) : (
                             <div className="calendar-month-body-cell-date">
-                                <div className="calendar-month-body-cell-date-value">
+                                <div className={
+                                    cs("calendar-month-body-cell-date-value",
+                                        value.format('YYYY-MM-DD') === item.date.format('YYYY-MM-DD')
+                                            ? 'calendar-month-body-cell-date-selected' : ''
+                                    )
+                                }>
                                     {item.date.date()}
                                 </div>
                                 <div className="calendar-month-body-cell-date-content">
