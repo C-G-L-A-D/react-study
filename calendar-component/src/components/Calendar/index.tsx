@@ -1,9 +1,10 @@
-import { Dayjs } from 'dayjs';
+import { Dayjs, locale } from 'dayjs';
 import './index.scss';
 import MonthCalendar from './MonthCalendar';
 import Header from './Header';
 import { CSSProperties, ReactNode } from 'react';
 import cs from 'classnames';
+import LocaleContext from './LocaleContext';
 
 export interface CalendarProps {
     value: Dayjs,
@@ -20,15 +21,17 @@ export interface CalendarProps {
 
 function Calendar(props: CalendarProps) {
 
-    const { value, style, className } = props
+    const { value, style, className, locale } = props
 
     // 使用 classnames 依赖库来合并类名
     const classNames = cs("calendar", className)
 
-    return <div className={classNames} style={style}>
-        <Header />
-        <MonthCalendar {...props}/>
-    </div>
+    return <LocaleContext.Provider value={{locale: locale || navigator.language}}>
+        <div className={classNames} style={style}>
+            <Header />
+            <MonthCalendar {...props}/>
+        </div>
+    </LocaleContext.Provider>
 }
 
 export default Calendar

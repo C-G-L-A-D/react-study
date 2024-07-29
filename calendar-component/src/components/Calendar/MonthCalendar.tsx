@@ -1,6 +1,9 @@
 import { Dayjs } from 'dayjs'
 import { CalendarProps } from './index'
-import { ReactNode } from 'react';
+import { ReactNode, useContext } from 'react';
+import CalendarLocale from './locale/zh-CN';
+import LocaleContext from './LocaleContext';
+import allLocales from './locale';
 
 // 子组件继承父组件的传参
 interface MonthCalendarProps extends CalendarProps {}
@@ -86,7 +89,12 @@ function renderDays(
 function MonthCalendar(props: MonthCalendarProps) {
     const { value, dateRender, dateInnerContent } = props
 
-    const weekList = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+    const weekList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+
+    
+    const localeContext = useContext(LocaleContext)
+    // 获取当前语言信息
+    const CalendarLocale = allLocales[localeContext.locale]
 
     // 获取当月日历
     const allDays = getAllDays(value)
@@ -96,7 +104,7 @@ function MonthCalendar(props: MonthCalendarProps) {
             {
                 weekList.map((item, index) => {
                     return <div className="calendar-month-week-list-item" key={item}>
-                        {item}
+                        {CalendarLocale.week[item]}
                     </div>
                 })
             }

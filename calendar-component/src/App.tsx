@@ -3,15 +3,7 @@ import Calendar from './components/Calendar'
 function App() {
   return (
     <div className="App">
-      <Calendar value={dayjs('2022-01-01')}
-        dateInnerContent={(date) => {
-          return <div>
-            <p style={{background: 'yellowgreen', height: '300px'}}>
-              {date.format('YYYY-MM-DD')}
-            </p>
-          </div>
-        }}
-      />
+      <Calendar value={dayjs('2022-01-01')}  locale="en-US"/>
     </div>
   );
 }
