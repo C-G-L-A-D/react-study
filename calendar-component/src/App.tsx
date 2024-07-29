@@ -4,7 +4,7 @@ function App() {
   return (
     <div className="App">
       <Calendar value={dayjs('2022-01-01')}
-        dateRender={(date) => {
+        dateInnerContent={(date) => {
           return <div>
             <p style={{background: 'yellowgreen', height: '300px'}}>
               {date.format('YYYY-MM-DD')}

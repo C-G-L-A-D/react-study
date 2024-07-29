@@ -61,7 +61,16 @@ function renderDays(
                             ' calendar-month-body-cell-current' : '')
                 }>
                     {
-                        dateRender ? dateRender(item.date) : item.date.date()
+                        dateRender ? dateRender(item.date) : (
+                            <div className="calendar-month-body-cell-date">
+                                <div className="calendar-month-body-cell-date-value">
+                                    {item.date.date()}
+                                </div>
+                                <div className="calendar-month-body-cell-date-content">
+                                    {dateInnerContent?.(item.date)}
+                                </div>
+                            </div>
+                        )
                     }
                 </div>
             )
