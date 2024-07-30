@@ -42,61 +42,7 @@ function getAllDays(date: Dayjs) {
     return daysInfo
 }
 
-/**
- * 渲染日历表格样式（根据每行进行渲染）
- * @param days 日历信息
- * @returns 日历组件显示
- */
-function renderDays(
-    days: Array<{date: Dayjs, currentMonth: boolean}>,
-    value: Dayjs,
-    dateRender?: MonthCalendarProps['dateRender'],
-    dateInnerContent?: MonthCalendarProps['dateInnerContent'],
-    selectHandler?: MonthCalendarProps['selectHandler']
-) {
-    const rows = [];
 
-    for(let i = 0; i < 6; i++) {
-        const row = []
-        for(let j = 0; j < 7; j++) {
-            const item = days[i * 7 + j];
-            // 设置每个日期的样式，并兼容外部配置
-            row[j] = (
-                <div
-                key={item.date.format('YYYY-MM-DD')}
-                onClick={() => selectHandler?.(item.date)}
-                className={
-                    "calendar-month-body-cell" +
-                        (item.currentMonth ? 
-                            ' calendar-month-body-cell-current' : '')
-                }>
-                    {
-                        dateRender ? dateRender(item.date) : (
-                            <div className="calendar-month-body-cell-date">
-                                <div className={
-                                    cs("calendar-month-body-cell-date-value",
-                                        value.format('YYYY-MM-DD') === item.date.format('YYYY-MM-DD')
-                                            ? 'calendar-month-body-cell-date-selected' : ''
-                                    )
-                                }>
-                                    {item.date.date()}
-                                </div>
-                                <div className="calendar-month-body-cell-date-content">
-                                    {dateInnerContent?.(item.date)}
-                                </div>
-                            </div>
-                        )
-                    }
-                </div>
-            )
-        }
-        rows.push(row)
-    }
-
-    return rows.map((row, index) => <div className="calendar-month-body-row" key={index}>
-        {row}
-    </div>)
-}
 
 function MonthCalendar(props: MonthCalendarProps) {
     const { curMonth, value, dateRender, dateInnerContent, selectHandler } = props
@@ -111,6 +57,58 @@ function MonthCalendar(props: MonthCalendarProps) {
     // 获取当月日历
     const allDays = getAllDays(curMonth)
 
+    /**
+     * 渲染日历表格样式（根据每行进行渲染）「渲染函数放在组件内部可以直接共享props，避免传递过多参数」
+     * @param days 日历信息
+     * @returns 日历组件显示
+     */
+    function renderDays(
+        days: Array<{date: Dayjs, currentMonth: boolean}>
+    ) {
+        const rows = [];
+
+        for(let i = 0; i < 6; i++) {
+            const row = []
+            for(let j = 0; j < 7; j++) {
+                const item = days[i * 7 + j];
+                // 设置每个日期的样式，并兼容外部配置
+                row[j] = (
+                    <div
+                    key={item.date.format('YYYY-MM-DD')}
+                    onClick={() => selectHandler?.(item.date)}
+                    className={
+                        "calendar-month-body-cell" +
+                            (item.currentMonth ? 
+                                ' calendar-month-body-cell-current' : '')
+                    }>
+                        {
+                            dateRender ? dateRender(item.date) : (
+                                <div className="calendar-month-body-cell-date">
+                                    <div className={
+                                        cs("calendar-month-body-cell-date-value",
+                                            value.format('YYYY-MM-DD') === item.date.format('YYYY-MM-DD')
+                                                ? 'calendar-month-body-cell-date-selected' : ''
+                                        )
+                                    }>
+                                        {item.date.date()}
+                                    </div>
+                                    <div className="calendar-month-body-cell-date-content">
+                                        {dateInnerContent?.(item.date)}
+                                    </div>
+                                </div>
+                            )
+                        }
+                    </div>
+                )
+            }
+            rows.push(row)
+        }
+
+        return rows.map((row, index) => <div className="calendar-month-body-row" key={index}>
+            {row}
+        </div>)
+    }
+
     return  <div className="calendar-month">
         <div className="calendar-month-week-list">
             {
@@ -122,7 +120,7 @@ function MonthCalendar(props: MonthCalendarProps) {
             }
         </div>
         <div className="calendar-month-body">
-            {renderDays(allDays, value, dateRender, dateInnerContent, selectHandler)}
+            {renderDays(allDays)}
         </div>
     </div>
 }

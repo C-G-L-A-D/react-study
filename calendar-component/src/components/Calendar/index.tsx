@@ -26,12 +26,20 @@ function Calendar(props: CalendarProps) {
     // 使用 classnames 依赖库来合并类名
     const classNames = cs("calendar", className)
 
-    // 当前日期状态管理
-    const [curValue, setCurValue] = useState<Dayjs>(value)
-    function selectHandler(date: Dayjs) {
+    /**
+     * 修改日期（抽离逻辑）
+     * @param date 待修改日期
+     */
+    function changeData(date: Dayjs) {
         setCurValue(date)
         setCurMonth(date)
         onChange?.(date)
+    }
+
+    // 当前日期状态管理
+    const [curValue, setCurValue] = useState<Dayjs>(value)
+    function selectHandler(date: Dayjs) {
+        changeData(date)
     }
 
     const [curMonth, setCurMonth] = useState<Dayjs>(value)
@@ -44,9 +52,7 @@ function Calendar(props: CalendarProps) {
     function todayHandler() {
         const date = dayjs(Date.now())
 
-        setCurValue(date)
-        setCurMonth(date)
-        onChange?.(date)
+        changeData(date)
     }
 
     return <LocaleContext.Provider value={{locale: locale || navigator.language}}>
