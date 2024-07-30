@@ -7,7 +7,7 @@ import allLocales from './locale';
 
 // 子组件继承父组件的传参
 interface MonthCalendarProps extends CalendarProps {
-    selectHandler?: (date: Dayjs) => void
+    selectHandler?: (date: Dayjs) => void;
 }
 
 /**

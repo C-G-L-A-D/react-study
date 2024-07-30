@@ -1,6 +1,13 @@
 import { useContext } from "react";
 import LocaleContext from "./LocaleContext";
 import allLocales from "./locale";
+import { Dayjs } from "dayjs";
+
+interface HeaderProps {
+    curMonth: Dayjs;
+    prevMonthHandler: () => void;
+    nextMonthHandler: () => void;
+}
 
 function Header() {
     const localeContext = useContext(LocaleContext)

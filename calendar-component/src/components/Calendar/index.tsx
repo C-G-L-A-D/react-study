@@ -7,16 +7,16 @@ import cs from 'classnames';
 import LocaleContext from './LocaleContext';
 
 export interface CalendarProps {
-    value: Dayjs,
-    style?: CSSProperties,
-    className?: string | string[],
+    value: Dayjs;
+    style?: CSSProperties;
+    className?: string | string[];
     // 定制日期显示
-    dateRender?: (currentDate: Dayjs) => ReactNode,
+    dateRender?: (currentDate: Dayjs) => ReactNode;
     // 定制日期单元格，内容会被添加到单元格内，只在全屏日历模式下生效
-    dateInnerContent?: (currentDate: Dayjs) => ReactNode,
+    dateInnerContent?: (currentDate: Dayjs) => ReactNode;
     // 国际化相关
-    locale?: string,
-    onChange?: (date: Dayjs) => void
+    locale?: string;
+    onChange?: (date: Dayjs) => void;
 }
 
 function Calendar(props: CalendarProps) {

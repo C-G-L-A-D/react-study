@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 
 export interface LocaleContextProps {
-    locale: string
+    locale: string;
 }
 
 const LocaleContext = createContext<LocaleContextProps>({
