@@ -7,6 +7,7 @@ import allLocales from './locale';
 
 // 子组件继承父组件的传参
 interface MonthCalendarProps extends CalendarProps {
+    curMonth: Dayjs;
     selectHandler?: (date: Dayjs) => void;
 }
 
@@ -98,7 +99,7 @@ function renderDays(
 }
 
 function MonthCalendar(props: MonthCalendarProps) {
-    const { value, dateRender, dateInnerContent, selectHandler } = props
+    const { curMonth, value, dateRender, dateInnerContent, selectHandler } = props
 
     const weekList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
 
@@ -108,7 +109,7 @@ function MonthCalendar(props: MonthCalendarProps) {
     const CalendarLocale = allLocales[localeContext.locale]
 
     // 获取当月日历
-    const allDays = getAllDays(value)
+    const allDays = getAllDays(curMonth)
 
     return  <div className="calendar-month">
         <div className="calendar-month-week-list">

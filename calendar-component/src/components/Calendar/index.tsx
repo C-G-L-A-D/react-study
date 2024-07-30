@@ -1,4 +1,4 @@
-import { Dayjs, locale } from 'dayjs';
+import dayjs, { Dayjs, locale } from 'dayjs';
 import './index.scss';
 import MonthCalendar from './MonthCalendar';
 import Header from './Header';
@@ -26,16 +26,33 @@ function Calendar(props: CalendarProps) {
     // 使用 classnames 依赖库来合并类名
     const classNames = cs("calendar", className)
 
+    // 当前日期状态管理
     const [curValue, setCurValue] = useState<Dayjs>(value)
     function selectHandler(date: Dayjs) {
         setCurValue(date)
+        setCurMonth(date)
+        onChange?.(date)
+    }
+
+    const [curMonth, setCurMonth] = useState<Dayjs>(value)
+    function prevMonthHandler() {
+        setCurMonth(curMonth.subtract(1, 'month'))
+    }
+    function nextMonthHandler() {
+        setCurMonth(curMonth.add(1, 'month'))
+    }
+    function todayHandler() {
+        const date = dayjs(Date.now())
+
+        setCurValue(date)
+        setCurMonth(date)
         onChange?.(date)
     }
 
     return <LocaleContext.Provider value={{locale: locale || navigator.language}}>
         <div className={classNames} style={style}>
-            <Header />
-            <MonthCalendar {...props} value={curValue} selectHandler={selectHandler} />
+            <Header curMonth={curMonth} prevMonthHandler={prevMonthHandler} nextMonthHandler={nextMonthHandler} todayHandler={todayHandler}/>
+            <MonthCalendar {...props} value={curValue} curMonth={curMonth} selectHandler={selectHandler} />
         </div>
     </LocaleContext.Provider>
 }
